@@ -182,6 +182,50 @@
             font-weight: bold;
         }
 
+        .results-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .results-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .result-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .result-group:last-child {
+            border-bottom: none;
+        }
+
+        .result-group label {
+            font-weight: bold;
+            color: #495057;
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .result-value {
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+
         .action-buttons {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -357,15 +401,17 @@
 
         @supports (-webkit-touch-callout: none) {
             body {
-                position: fixed;
+                /* Allow scrolling on iOS */
+                position: relative;
                 width: 100%;
-                height: 100%;
-                overflow: hidden;
+                min-height: 100vh;
+                overflow-y: auto;
             }
             
-            .container, .calculator, .simple-calculator {
-                max-height: 90vh;
-                overflow-y: auto;
+            .calculator, .simple-calculator {
+                /* Ensure calculator can scroll */
+                max-height: none;
+                overflow-y: visible;
             }
         }
 
@@ -486,7 +532,17 @@
         
         <button class="calculate-btn" onclick="calculateHeatingTime()">Calculate Heating Time</button>
         
-        <div class="result" id="heating-result" style="display: none;"></div>
+        <div class="results-section">
+            <h3>Risultati:</h3>
+            <div class="result-group">
+                <label>Estimated Heating Time:</label>
+                <div class="result-value" id="heating-result"></div>
+            </div>
+            <div class="result-group">
+                <label>Time in Seconds (s):</label>
+                <div class="result-value" id="heating-seconds"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Power Calculator -->
@@ -544,7 +600,29 @@
         
         <button class="calculate-btn" onclick="calculatePower()">Calculate Required Power</button>
         
-        <div class="result" id="power-result" style="display: none;"></div>
+        <div class="results-section">
+            <h3>Risultati:</h3>
+            <div class="result-group">
+                <label>Total Power Required (W/h):</label>
+                <div class="result-value" id="total-power"></div>
+            </div>
+            <div class="result-group">
+                <label>Power to Water (W/h):</label>
+                <div class="result-value" id="power-to-water"></div>
+            </div>
+            <div class="result-group">
+                <label>Power to Stainless Steel (W/h):</label>
+                <div class="result-value" id="power-to-steel"></div>
+            </div>
+            <div class="result-group">
+                <label>Power Lost to Environment (W/h):</label>
+                <div class="result-value" id="power-lost"></div>
+            </div>
+            <div class="result-group">
+                <label>Required Heater Power (W):</label>
+                <div class="result-value" id="instant-power"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Cooling Time Calculator -->
@@ -597,7 +675,29 @@
         
         <button class="calculate-btn" onclick="calculateCoolingTime()">Calculate Cooling Time</button>
         
-        <div class="result" id="cooling-result" style="display: none;"></div>
+        <div class="results-section">
+            <h3>Risultati:</h3>
+            <div class="result-group">
+                <label>Estimated Cooling Time:</label>
+                <div class="result-value" id="cooling-result"></div>
+            </div>
+            <div class="result-group">
+                <label>Time in Seconds (s):</label>
+                <div class="result-value" id="cooling-seconds"></div>
+            </div>
+            <div class="result-group">
+                <label>Total Power Lost (W/h):</label>
+                <div class="result-value" id="cooling-total-power-lost"></div>
+            </div>
+            <div class="result-group">
+                <label>Total Power Lost Water (W/h):</label>
+                <div class="result-value" id="cooling-total-power-lost-water"></div>
+            </div>
+            <div class="result-group">
+                <label>Total Power Lost Stainless Steel (W/h):</label>
+                <div class="result-value" id="cooling-total-power-lost-steel"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Brewing Loss Calculator -->
@@ -650,7 +750,37 @@
         
         <button class="calculate-btn" onclick="calculateBrewingLoss()">Calculate Brewing Loss</button>
         
-        <div class="result" id="brewing-result" style="display: none;"></div>
+        <div class="results-section">
+            <h3>Risultati:</h3>
+            <div class="result-group">
+                <label>Boiler Final Temperature (°C):</label>
+                <div class="result-value" id="final-temp"></div>
+            </div>
+            <div class="result-group">
+                <label>Boiler Temperature Loss (°C):</label>
+                <div class="result-value" id="lost-temp"></div>
+            </div>
+            <div class="result-group">
+                <label>Average Brewed Temperature (°C):</label>
+                <div class="result-value" id="average-brewed-temp"></div>
+            </div>
+            <div class="result-group">
+                <label>Initial Brewed Temperature (°C):</label>
+                <div class="result-value" id="initial-brewed-temp"></div>
+            </div>
+            <div class="result-group">
+                <label>Final Brewed Temperature (°C):</label>
+                <div class="result-value" id="final-brewed-temp"></div>
+            </div>
+            <div class="result-group">
+                <label>Total Brewed Volume (L):</label>
+                <div class="result-value" id="total-brewed-volume"></div>
+            </div>
+            <div class="result-group">
+                <label>Brewing Energy Loss (W):</label>
+                <div class="result-value" id="brewing-energy-loss"></div>
+            </div>
+        </div>
     </div>
 
     <!-- Simple Calculator -->
@@ -830,29 +960,267 @@
             }, 3000);
         }
 
-        // Calculation functions
+        // Calculation functions with correct algorithms from boiler_calculator.py
         function calculateHeatingTime() {
-            const params = getCalculatorParams('ht_');
-            const result = calculateHeatingTimeFormula(params);
-            showResult('heating-result', `Heating Time: ${result.toFixed(2)} seconds (${(result/60).toFixed(2)} minutes)`);
+            try {
+                const params = getCalculatorParams('ht_');
+                
+                // Constants from Python code
+                const WATER_SPECIFIC_HEAT = 4186;  // J/(kg·°C)
+                const WATER_DENSITY = 1.0;  // kg/L
+                const STAINLESS_STEEL_DENSITY = 8000;  // kg/m³
+                const STAINLESS_STEEL_SPECIFIC_HEAT = 500;  // J/(kg·°C)
+                
+                // Calculate masses
+                const water_mass = params.ht_water_volume * WATER_DENSITY;  // kg
+                const stainless_steel_mass = params.ht_stainless_steel_volume * STAINLESS_STEEL_DENSITY;  // kg
+                
+                // Calculate time using numerical approximation (same as Python)
+                const time_step = 0.1;  // seconds
+                let current_temp = params.ht_initial_temp;
+                let total_time = 0;
+                
+                while (current_temp < params.ht_target_temp && total_time < 3600) {  // limit to 1 hour
+                    // Calculate heat loss using heat transfer coefficient and surface area
+                    const heat_loss = params.ht_heat_transfer_coeff * params.ht_surface_area * (current_temp - params.ht_room_temp);
+                    
+                    // Calculate energy input from heater for this time step
+                    const energy_input = params.ht_heater_power * time_step;  // Joules
+                    
+                    // Calculate energy lost to environment in this time step
+                    const energy_lost = heat_loss * time_step;  // Joules
+                    
+                    // Calculate temperature change from net energy
+                    const delta_temp = (energy_input - energy_lost) / (water_mass * WATER_SPECIFIC_HEAT + stainless_steel_mass * STAINLESS_STEEL_SPECIFIC_HEAT);
+                    current_temp += delta_temp;
+                    total_time += time_step;
+                }
+                
+                // Format results (same as Python)
+                let formatted_result, seconds_result;
+                if (total_time >= 3600) {
+                    formatted_result = "Over 1 hour";
+                    seconds_result = "> 3600";
+                } else {
+                    const minutes = Math.floor(total_time / 60);
+                    const seconds = Math.floor(total_time % 60);
+                    formatted_result = `${minutes}m ${seconds}s`;
+                    seconds_result = total_time.toFixed(1);
+                }
+                
+                // Update result fields
+                document.getElementById('heating-result').textContent = formatted_result;
+                document.getElementById('heating-seconds').textContent = seconds_result;
+                
+            } catch (error) {
+                alert('Errore nel calcolo: ' + error.message);
+            }
         }
 
         function calculatePower() {
-            const params = getCalculatorParams('pc_');
-            const result = calculatePowerFormula(params);
-            showResult('power-result', `Required Power: ${result.toFixed(2)} W`);
+            try {
+                const params = getCalculatorParams('pc_');
+                
+                // Constants from Python code
+                const WATER_SPECIFIC_HEAT = 4186;  // J/(kg·°C)
+                const WATER_DENSITY = 1.0;  // kg/L
+                const STAINLESS_STEEL_DENSITY = 8000;  // kg/m³
+                const STAINLESS_STEEL_SPECIFIC_HEAT = 500;  // J/(kg·°C)
+                
+                // Calculate masses
+                const water_mass = params.pc_water_volume * WATER_DENSITY;  // kg
+                const stainless_steel_mass = params.pc_stainless_steel_volume * STAINLESS_STEEL_DENSITY;  // kg
+                
+                // Use numerical approximation to calculate power requirements (same as Python)
+                const time_step = 0.1;  // seconds
+                
+                const total_energy_to_water = (water_mass * WATER_SPECIFIC_HEAT) * (params.pc_target_temp - params.pc_initial_temp);
+                const total_energy_to_steel = (stainless_steel_mass * STAINLESS_STEEL_SPECIFIC_HEAT) * (params.pc_target_temp - params.pc_initial_temp);
+                const first_estimate_total_energy_lost = params.pc_time_required * params.pc_heat_transfer_coeff * params.pc_surface_area * ((params.pc_target_temp + params.pc_initial_temp)/2 - params.pc_room_temp);
+                const first_estimate_total_energy = total_energy_to_water + total_energy_to_steel + first_estimate_total_energy_lost;
+                let first_estimate_total_power = first_estimate_total_energy / params.pc_time_required;
+                
+                // Iterative calculation (same as Python)
+                let number_of_iterations = 0;
+                while (number_of_iterations < 10) {
+                    let current_temp = params.pc_initial_temp;
+                    let total_energy_lost = 0;
+                    let simulation_time = 0;
+                    
+                    while (simulation_time < params.pc_time_required && current_temp < params.pc_target_temp) {
+                        // Calculate heat loss at current temperature
+                        const heat_loss = params.pc_heat_transfer_coeff * params.pc_surface_area * (current_temp - params.pc_room_temp);
+                        total_energy_lost += heat_loss * time_step;
+                        
+                        // Calculate temperature change from net energy
+                        const delta_temp = (first_estimate_total_power * time_step - heat_loss * time_step) / (water_mass * WATER_SPECIFIC_HEAT + stainless_steel_mass * STAINLESS_STEEL_SPECIFIC_HEAT);
+                        current_temp += delta_temp;
+                        
+                        // Update simulation time
+                        simulation_time += time_step;
+                    }
+                    first_estimate_total_power = (total_energy_to_water + total_energy_to_steel + total_energy_lost) / params.pc_time_required;
+                    number_of_iterations++;
+                }
+                
+                // Calculate average powers (same as Python)
+                const power_to_water = total_energy_to_water / params.pc_time_required;  // Watts
+                const power_to_steel = total_energy_to_steel / params.pc_time_required;  // Watts
+                const power_lost = total_energy_lost / params.pc_time_required;  // Watts
+                const total_power = power_to_water + power_to_steel + power_lost;  // Watts
+                
+                // Convert to W/h for display (same as Python)
+                const hours = params.pc_time_required / 3600;  // convert seconds to hours
+                const total_power_per_hour = total_power * hours;
+                const power_to_water_per_hour = power_to_water * hours;
+                const power_to_steel_per_hour = power_to_steel * hours;
+                const power_lost_per_hour = power_lost * hours;
+                
+                // Update result fields
+                document.getElementById('total-power').textContent = total_power_per_hour.toFixed(1);
+                document.getElementById('power-to-water').textContent = power_to_water_per_hour.toFixed(1);
+                document.getElementById('power-to-steel').textContent = power_to_steel_per_hour.toFixed(1);
+                document.getElementById('power-lost').textContent = power_lost_per_hour.toFixed(1);
+                document.getElementById('instant-power').textContent = total_power.toFixed(1);
+                
+            } catch (error) {
+                alert('Errore nel calcolo: ' + error.message);
+            }
         }
 
         function calculateCoolingTime() {
-            const params = getCalculatorParams('ct_');
-            const result = calculateCoolingTimeFormula(params);
-            showResult('cooling-result', `Cooling Time: ${result.toFixed(2)} seconds (${(result/60).toFixed(2)} minutes)`);
+            try {
+                const params = getCalculatorParams('ct_');
+                
+                // Constants from Python code
+                const WATER_SPECIFIC_HEAT = 4186;  // J/(kg·°C)
+                const WATER_DENSITY = 1.0;  // kg/L
+                const STAINLESS_STEEL_DENSITY = 8000;  // kg/m³
+                const STAINLESS_STEEL_SPECIFIC_HEAT = 500;  // J/(kg·°C)
+                
+                // Calculate masses
+                const water_mass = params.ct_water_volume * WATER_DENSITY;  // kg
+                const stainless_steel_mass = params.ct_stainless_steel_volume * STAINLESS_STEEL_DENSITY;  // kg
+                
+                // Calculate time using numerical approximation (same as Python)
+                const time_step = 0.1;  // seconds
+                let current_temp = params.ct_initial_temp;
+                let total_time = 0;
+                let total_energy_lost = 0;  // Track total energy lost
+                let total_energy_lost_water = 0;  // Track energy lost from water
+                let total_energy_lost_steel = 0;  // Track energy lost from stainless steel
+                
+                while (current_temp > params.ct_final_temp && total_time < 10800) {  // limit to 3 hours
+                    // Calculate heat loss using heat transfer coefficient and surface area
+                    const heat_loss = params.ct_heat_transfer_coeff * params.ct_surface_area * (current_temp - params.ct_room_temp);
+                    
+                    // Calculate energy lost to environment in this time step
+                    const energy_lost = heat_loss * time_step;  // Joules
+                    total_energy_lost += energy_lost;  // Accumulate total energy lost
+                    
+                    // Calculate temperature change from energy lost
+                    const delta_temp = energy_lost / (water_mass * WATER_SPECIFIC_HEAT + stainless_steel_mass * STAINLESS_STEEL_SPECIFIC_HEAT);
+                    current_temp -= delta_temp;  // Decrease current temperature
+                    total_time += time_step;
+                }
+                
+                // Calculate Total Power Lost (W/H) (same as Python)
+                const delta_temp = params.ct_initial_temp - current_temp;
+                const total_power_lost_water = delta_temp * (water_mass * WATER_SPECIFIC_HEAT) / 3600;
+                const total_power_lost_steel = delta_temp * (stainless_steel_mass * STAINLESS_STEEL_SPECIFIC_HEAT) / 3600;
+                const total_power_lost = total_power_lost_water + total_power_lost_steel;
+                
+                // Format results (same as Python)
+                let formatted_result, seconds_result;
+                if (total_time >= 10800) {
+                    formatted_result = "Over 3 hours";
+                    seconds_result = "> 10800";
+                } else {
+                    const minutes = Math.floor(total_time / 60);
+                    const seconds = Math.floor(total_time % 60);
+                    formatted_result = `${minutes}m ${seconds}s`;
+                    seconds_result = total_time.toFixed(1);
+                }
+                
+                // Update result fields
+                document.getElementById('cooling-result').textContent = formatted_result;
+                document.getElementById('cooling-seconds').textContent = seconds_result;
+                document.getElementById('cooling-total-power-lost').textContent = total_power_lost.toFixed(1);
+                document.getElementById('cooling-total-power-lost-water').textContent = total_power_lost_water.toFixed(1);
+                document.getElementById('cooling-total-power-lost-steel').textContent = total_power_lost_steel.toFixed(1);
+                
+            } catch (error) {
+                alert('Errore nel calcolo: ' + error.message);
+            }
         }
 
         function calculateBrewingLoss() {
-            const params = getCalculatorParams('br_');
-            const result = calculateBrewingLossFormula(params);
-            showResult('brewing-result', `Brewing Loss: ${result.toFixed(2)} °C`);
+            try {
+                const params = getCalculatorParams('br_');
+                
+                // Constants from Python code
+                const WATER_SPECIFIC_HEAT = 4186;  // J/(kg·°C)
+                const STEEL_SPECIFIC_HEAT = 500;   // J/(kg·°C)
+                const WATER_DENSITY = 1.0;         // kg/L
+                const STEEL_DENSITY = 8000.0;      // kg/m³
+                
+                // Calculate masses (same as Python)
+                const water_mass = params.br_water_volume * WATER_DENSITY;
+                const steel_mass = params.br_stainless_steel_volume * STEEL_DENSITY;
+                const total_thermal_mass = (water_mass * WATER_SPECIFIC_HEAT + steel_mass * STEEL_SPECIFIC_HEAT);
+                
+                // Calculate water replacement rate (kg/s) (same as Python)
+                const water_flow_mass = params.br_brewing_flow_rate * WATER_DENSITY / 1000.0;  // (mL/s *Kg/L) / 1000 to get kg/s
+                
+                // Calculate time using numerical approximation (same as Python)
+                const time_step = 0.01;  // seconds
+                let current_temp = params.br_initial_temp;
+                let total_time = 0;  // Track total energy lost
+                let brewing_heat_loss = 0;
+                let total_brewing_energy_loss = 0;
+                let average_brewed_temp = 0;
+                const numberofsteps = Math.floor(params.br_brewing_time_duration / time_step);
+                let initial_brewed_temp = 0;
+                
+                while (total_time < params.br_brewing_time_duration) {
+                    brewing_heat_loss = (water_flow_mass * WATER_SPECIFIC_HEAT * (current_temp - params.br_plumbing_temperature));
+                    const brewing_energy_loss_step = brewing_heat_loss * time_step;
+                    total_brewing_energy_loss += brewing_energy_loss_step;
+                    
+                    const applied_heater_energy_step = params.br_applied_heater_power * time_step;
+                    
+                    const delta_energy_step = applied_heater_energy_step - brewing_energy_loss_step;
+                    // Calculate temperature change from energy lost and applied heater power
+                    const delta_temp_step = (delta_energy_step) / (total_thermal_mass);
+                    current_temp += delta_temp_step;  // update current temperature
+                    
+                    if (total_time === 0) {
+                        initial_brewed_temp = current_temp;
+                    }
+                    total_time += time_step;
+                    average_brewed_temp += current_temp / numberofsteps;
+                }
+                
+                const brewing_energy_loss = (total_brewing_energy_loss / params.br_brewing_time_duration);
+                
+                const final_temp = current_temp;
+                const lost_temp = params.br_initial_temp - final_temp;
+                const final_brewed_temp = final_temp;
+                
+                const total_brewed_volume = (params.br_brewing_flow_rate * params.br_brewing_time_duration) / 1000.0;  // Convert mL to L
+                
+                // Update result fields
+                document.getElementById('final-temp').textContent = final_temp.toFixed(1);
+                document.getElementById('lost-temp').textContent = lost_temp.toFixed(1);
+                document.getElementById('average-brewed-temp').textContent = average_brewed_temp.toFixed(1);
+                document.getElementById('initial-brewed-temp').textContent = initial_brewed_temp.toFixed(1);
+                document.getElementById('final-brewed-temp').textContent = final_brewed_temp.toFixed(1);
+                document.getElementById('total-brewed-volume').textContent = total_brewed_volume.toFixed(1);
+                document.getElementById('brewing-energy-loss').textContent = brewing_energy_loss.toFixed(1);
+                
+            } catch (error) {
+                alert('Errore nel calcolo: ' + error.message);
+            }
         }
 
         function getCalculatorParams(prefix) {
@@ -868,71 +1236,7 @@
             return params;
         }
 
-        function showResult(elementId, message) {
-            const resultElement = document.getElementById(elementId);
-            resultElement.textContent = message;
-            resultElement.style.display = 'block';
-        }
 
-        // Calculation formulas (simplified versions based on boiler_calculator.py)
-        function calculateHeatingTimeFormula(params) {
-            const waterMass = params.ht_water_volume * 1000; // kg
-            const steelMass = params.ht_stainless_steel_volume * 8000; // kg (density of steel)
-            const totalMass = waterMass + steelMass;
-            const specificHeat = 4200; // J/kg·°C for water
-            const steelSpecificHeat = 500; // J/kg·°C for steel
-            
-            const energyNeeded = (waterMass * specificHeat + steelMass * steelSpecificHeat) * 
-                                (params.ht_target_temp - params.ht_initial_temp);
-            const heatLoss = params.ht_heat_transfer_coeff * params.ht_surface_area * 
-                           (params.ht_target_temp - params.ht_room_temp);
-            
-            return energyNeeded / (params.ht_heater_power - heatLoss);
-        }
-
-        function calculatePowerFormula(params) {
-            const waterMass = params.pc_water_volume * 1000; // kg
-            const steelMass = params.pc_stainless_steel_volume * 8000; // kg
-            const totalMass = waterMass + steelMass;
-            const specificHeat = 4200; // J/kg·°C for water
-            const steelSpecificHeat = 500; // J/kg·°C for steel
-            
-            const energyNeeded = (waterMass * specificHeat + steelMass * steelSpecificHeat) * 
-                                (params.pc_target_temp - params.pc_initial_temp);
-            const heatLoss = params.pc_heat_transfer_coeff * params.pc_surface_area * 
-                           (params.pc_target_temp - params.pc_room_temp);
-            
-            return energyNeeded / params.pc_time_required + heatLoss;
-        }
-
-        function calculateCoolingTimeFormula(params) {
-            const waterMass = params.ct_water_volume * 1000; // kg
-            const steelMass = params.ct_stainless_steel_volume * 8000; // kg
-            const specificHeat = 4200; // J/kg·°C for water
-            const steelSpecificHeat = 500; // J/kg·°C for steel
-            
-            const totalHeatCapacity = waterMass * specificHeat + steelMass * steelSpecificHeat;
-            const heatLossRate = params.ct_heat_transfer_coeff * params.ct_surface_area * 
-                               ((params.ct_initial_temp + params.ct_final_temp) / 2 - params.ct_room_temp);
-            
-            return totalHeatCapacity * (params.ct_initial_temp - params.ct_final_temp) / heatLossRate;
-        }
-
-        function calculateBrewingLossFormula(params) {
-            const waterMass = params.br_water_volume * 1000; // kg
-            const steelMass = params.br_stainless_steel_volume * 8000; // kg
-            const specificHeat = 4200; // J/kg·°C for water
-            const steelSpecificHeat = 500; // J/kg·°C for steel
-            
-            const totalHeatCapacity = waterMass * specificHeat + steelMass * steelSpecificHeat;
-            const brewingVolume = params.br_brewing_flow_rate * params.br_brewing_time_duration / 1000; // L
-            const brewingMass = brewingVolume * 1000; // kg
-            
-            const energyLoss = brewingMass * specificHeat * (params.br_initial_temp - params.br_plumbing_temperature);
-            const temperatureLoss = energyLoss / totalHeatCapacity;
-            
-            return temperatureLoss;
-        }
 
         // Simple Calculator (from previous implementation)
         class Calculator {
