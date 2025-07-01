@@ -1,6 +1,6 @@
 # PWA Prova
 
-A Progressive Web App (PWA) demonstration project with modern UI and offline capabilities.
+A Progressivesssss Web App (PWA) demonstration project with modern UI and offline capabilities.
 
 ## Features
 
