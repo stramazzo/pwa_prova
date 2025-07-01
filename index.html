@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A Progressive Web App">
-    <meta name="theme-color" content="#4285f4">
-    <title>PWA Prova</title>
+    <meta name="description" content="Calcolatrice PWA - Una calcolatrice moderna e funzionale">
+    <meta name="theme-color" content="#2c3e50">
+    <title>Calcolatrice PWA</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
@@ -22,50 +22,107 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
-        .container {
+        .calculator {
             background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 350px;
+            width: 100%;
+        }
+
+        .display {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
+            margin-bottom: 20px;
+            text-align: right;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
-        h1 {
-            color: #333;
-            margin-bottom: 1rem;
+        .previous-operand {
+            font-size: 1.2rem;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+            min-height: 1.5rem;
+        }
+
+        .current-operand {
             font-size: 2.5rem;
+            font-weight: bold;
+            word-wrap: break-word;
+            word-break: break-all;
         }
 
-        p {
-            color: #666;
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
         }
 
         .btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 24px;
+            background: #ecf0f1;
             border: none;
-            border-radius: 25px;
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 1rem;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            color: #2c3e50;
         }
 
         .btn:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.operator {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn.equals {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn.clear {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn.delete {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn.span-2 {
+            grid-column: span 2;
+        }
+
+        .btn.span-4 {
+            grid-column: span 4;
         }
 
         .status {
-            margin-top: 1rem;
+            margin-top: 15px;
             padding: 10px;
-            border-radius: 5px;
+            border-radius: 10px;
+            text-align: center;
             font-weight: bold;
+            font-size: 0.9rem;
         }
 
         .online {
@@ -77,27 +134,229 @@
             background: #f8d7da;
             color: #721c24;
         }
+
+        @media (max-width: 400px) {
+            .calculator {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 15px;
+                font-size: 1.2rem;
+            }
+            
+            .current-operand {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 PWA Prova</h1>
-        <p>Welcome to your Progressive Web App! This app can be installed on your device and works offline.</p>
+    <div class="calculator">
+        <div class="display">
+            <div class="previous-operand" id="previous-operand"></div>
+            <div class="current-operand" id="current-operand">0</div>
+        </div>
         
-        <button class="btn" onclick="showInstallPrompt()">Install App</button>
+        <div class="buttons">
+            <button class="btn clear" onclick="clearAll()">AC</button>
+            <button class="btn delete" onclick="deleteLast()">DEL</button>
+            <button class="btn operator" onclick="chooseOperation('%')">%</button>
+            <button class="btn operator" onclick="chooseOperation('÷')">÷</button>
+            
+            <button class="btn" onclick="appendNumber('7')">7</button>
+            <button class="btn" onclick="appendNumber('8')">8</button>
+            <button class="btn" onclick="appendNumber('9')">9</button>
+            <button class="btn operator" onclick="chooseOperation('×')">×</button>
+            
+            <button class="btn" onclick="appendNumber('4')">4</button>
+            <button class="btn" onclick="appendNumber('5')">5</button>
+            <button class="btn" onclick="appendNumber('6')">6</button>
+            <button class="btn operator" onclick="chooseOperation('-')">-</button>
+            
+            <button class="btn" onclick="appendNumber('1')">1</button>
+            <button class="btn" onclick="appendNumber('2')">2</button>
+            <button class="btn" onclick="appendNumber('3')">3</button>
+            <button class="btn operator" onclick="chooseOperation('+')">+</button>
+            
+            <button class="btn" onclick="appendNumber('0')">0</button>
+            <button class="btn" onclick="appendDecimal()">.</button>
+            <button class="btn equals span-2" onclick="compute()">=</button>
+        </div>
         
         <div id="status" class="status">
-            <span id="connection-status">Checking connection...</span>
+            <span id="connection-status">Controllo connessione...</span>
         </div>
     </div>
 
     <script>
-        // Check if the app is running as a PWA
-        if (window.matchMedia('(display-mode: standalone)').matches) {
-            console.log('Running as PWA');
+        class Calculator {
+            constructor() {
+                this.previousOperand = '';
+                this.currentOperand = '0';
+                this.operation = undefined;
+            }
+
+            clear() {
+                this.currentOperand = '0';
+                this.previousOperand = '';
+                this.operation = undefined;
+            }
+
+            delete() {
+                if (this.currentOperand === '0') return;
+                this.currentOperand = this.currentOperand.toString().slice(0, -1);
+                if (this.currentOperand === '') this.currentOperand = '0';
+            }
+
+            appendNumber(number) {
+                if (number === '.' && this.currentOperand.includes('.')) return;
+                if (this.currentOperand === '0' && number !== '.') {
+                    this.currentOperand = number.toString();
+                } else {
+                    this.currentOperand = this.currentOperand.toString() + number.toString();
+                }
+            }
+
+            chooseOperation(operation) {
+                if (this.currentOperand === '0') return;
+                if (this.previousOperand !== '') {
+                    this.compute();
+                }
+                this.operation = operation;
+                this.previousOperand = this.currentOperand;
+                this.currentOperand = '0';
+            }
+
+            compute() {
+                let computation;
+                const prev = parseFloat(this.previousOperand);
+                const current = parseFloat(this.currentOperand);
+                if (isNaN(prev) || isNaN(current)) return;
+
+                switch (this.operation) {
+                    case '+':
+                        computation = prev + current;
+                        break;
+                    case '-':
+                        computation = prev - current;
+                        break;
+                    case '×':
+                        computation = prev * current;
+                        break;
+                    case '÷':
+                        if (current === 0) {
+                            alert('Non puoi dividere per zero!');
+                            return;
+                        }
+                        computation = prev / current;
+                        break;
+                    case '%':
+                        computation = prev % current;
+                        break;
+                    default:
+                        return;
+                }
+
+                this.currentOperand = computation;
+                this.operation = undefined;
+                this.previousOperand = '';
+            }
+
+            getDisplayNumber(number) {
+                const stringNumber = number.toString();
+                const integerDigits = parseFloat(stringNumber.split('.')[0]);
+                const decimalDigits = stringNumber.split('.')[1];
+                let integerDisplay;
+                
+                if (isNaN(integerDigits)) {
+                    integerDisplay = '';
+                } else {
+                    integerDisplay = integerDigits.toLocaleString('it-IT', {
+                        maximumFractionDigits: 0
+                    });
+                }
+                
+                if (decimalDigits != null) {
+                    return `${integerDisplay}.${decimalDigits}`;
+                } else {
+                    return integerDisplay;
+                }
+            }
+
+            updateDisplay() {
+                document.getElementById('current-operand').innerText = this.getDisplayNumber(this.currentOperand);
+                if (this.operation != null) {
+                    document.getElementById('previous-operand').innerText = 
+                        `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+                } else {
+                    document.getElementById('previous-operand').innerText = '';
+                }
+            }
         }
 
-        // Update connection status
+        const calculator = new Calculator();
+
+        // Funzioni globali per i pulsanti
+        function clearAll() {
+            calculator.clear();
+            calculator.updateDisplay();
+        }
+
+        function deleteLast() {
+            calculator.delete();
+            calculator.updateDisplay();
+        }
+
+        function appendNumber(number) {
+            calculator.appendNumber(number);
+            calculator.updateDisplay();
+        }
+
+        function appendDecimal() {
+            calculator.appendNumber('.');
+            calculator.updateDisplay();
+        }
+
+        function chooseOperation(operation) {
+            calculator.chooseOperation(operation);
+            calculator.updateDisplay();
+        }
+
+        function compute() {
+            calculator.compute();
+            calculator.updateDisplay();
+        }
+
+        // Supporto per tastiera
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            
+            if (key >= '0' && key <= '9') {
+                appendNumber(key);
+            } else if (key === '.') {
+                appendDecimal();
+            } else if (key === '+') {
+                chooseOperation('+');
+            } else if (key === '-') {
+                chooseOperation('-');
+            } else if (key === '*') {
+                chooseOperation('×');
+            } else if (key === '/') {
+                event.preventDefault();
+                chooseOperation('÷');
+            } else if (key === '%') {
+                chooseOperation('%');
+            } else if (key === 'Enter' || key === '=') {
+                compute();
+            } else if (key === 'Backspace') {
+                deleteLast();
+            } else if (key === 'Escape') {
+                clearAll();
+            }
+        });
+
+        // Funzionalità PWA
         function updateConnectionStatus() {
             const statusElement = document.getElementById('connection-status');
             const statusDiv = document.getElementById('status');
@@ -117,22 +376,6 @@
             e.preventDefault();
             deferredPrompt = e;
         });
-
-        function showInstallPrompt() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the install prompt');
-                    } else {
-                        console.log('User dismissed the install prompt');
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                alert('Install prompt not available. You can install this app from your browser menu.');
-            }
-        }
 
         // Event listeners
         window.addEventListener('online', updateConnectionStatus);

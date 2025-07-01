@@ -1,66 +1,100 @@
-# PWA Prova
+# Calcolatrice PWA
 
-A Progressivesssss Web App (PWA) demonstration project with modern UI and offline capabilities.
+Una calcolatrice moderna e funzionale sviluppata come Progressive Web App (PWA) con design responsive e funzionalità offline.
 
-## Features
+## 🧮 Funzionalità
 
-- 🚀 **Progressive Web App** - Installable on devices
-- 📱 **Responsive Design** - Works on all screen sizes
-- 🔄 **Offline Support** - Works without internet connection
-- 🎨 **Modern UI** - Beautiful gradient design with smooth animations
-- ⚡ **Fast Loading** - Optimized for performance
+- **Calcoli completi**: Addizione, sottrazione, moltiplicazione, divisione e modulo
+- **Design moderno**: Interfaccia elegante con animazioni fluide
+- **Responsive**: Ottimizzata per desktop, tablet e smartphone
+- **Tastiera supportata**: Utilizzabile con la tastiera del computer
+- **PWA installabile**: Può essere installata come app nativa
+- **Offline**: Funziona senza connessione internet
+- **Formattazione numeri**: Visualizzazione con separatori delle migliaia
 
-## Getting Started
+## 🎯 Operazioni Supportate
 
-1. Clone the repository:
+- **Operazioni base**: +, -, ×, ÷
+- **Modulo**: % (resto della divisione)
+- **Decimali**: Supporto per numeri decimali
+- **Cancellazione**: AC (All Clear) e DEL (Delete)
+- **Prevenzione errori**: Controllo divisione per zero
+
+## ⌨️ Controlli da Tastiera
+
+- **Numeri**: 0-9
+- **Operatori**: +, -, *, /, %
+- **Enter/Spazio**: Calcola il risultato
+- **Backspace**: Cancella ultimo carattere
+- **Escape**: Cancella tutto
+- **Punto**: Aggiunge decimale
+
+## 🚀 Installazione
+
+### Sviluppo Locale
+
+1. Clona il repository:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/stramazzo/pwa_prova.git
    cd pwa_prova
    ```
 
-2. Open `index.html` in your browser or serve it using a local server:
+2. Apri `index.html` nel browser o avvia un server locale:
    ```bash
-   # Using Python
+   # Con Python
    python -m http.server 8000
    
-   # Using Node.js
+   # Con Node.js
    npx serve .
    ```
 
-3. Visit `http://localhost:8000` in your browser
+3. Visita `http://localhost:8000`
 
-## Installation
+### Installazione come App
 
-This PWA can be installed on your device:
+- **Desktop**: Cerca il pulsante di installazione nella barra degli indirizzi
+- **Mobile**: Usa "Aggiungi alla schermata Home" dal menu del browser
 
-- **Desktop**: Look for the install button in your browser's address bar
-- **Mobile**: Use the "Add to Home Screen" option in your browser menu
+## 📱 Caratteristiche PWA
 
-## Project Structure
+- **Manifest**: Configurazione per installazione
+- **Service Worker**: Cache per funzionamento offline
+- **Design responsive**: Adattamento automatico ai dispositivi
+- **Tema scuro**: Interfaccia moderna con colori eleganti
+
+## 🛠️ Tecnologie Utilizzate
+
+- **HTML5**: Struttura semantica
+- **CSS3**: Grid, Flexbox, animazioni e design responsive
+- **JavaScript ES6+**: Classe Calculator, event listeners
+- **PWA APIs**: Service Worker, Web App Manifest
+
+## 📊 Struttura del Progetto
 
 ```
 pwa_prova/
-├── index.html          # Main HTML file
-├── manifest.json       # PWA manifest (to be created)
-├── sw.js              # Service Worker (to be created)
-├── favicon.ico        # App icon (to be created)
-└── README.md          # This file
+├── index.html          # Calcolatrice PWA principale
+├── manifest.json       # Configurazione PWA (da creare)
+├── sw.js              # Service Worker (da creare)
+├── favicon.ico        # Icona app (da creare)
+└── README.md          # Documentazione
 ```
 
-## Technologies Used
+## 🎨 Design
 
-- HTML5
-- CSS3 (with modern features like Flexbox and Gradients)
-- Vanilla JavaScript
-- Progressive Web App APIs
+- **Colori**: Gradiente blu-viola con tema scuro per il display
+- **Layout**: Grid CSS per i pulsanti, Flexbox per il display
+- **Animazioni**: Hover effects e transizioni fluide
+- **Tipografia**: Font moderni e leggibili
 
-## Browser Support
+## 🌐 Supporto Browser
 
-This PWA works in all modern browsers that support:
+Funziona su tutti i browser moderni che supportano:
 - Service Workers
 - Web App Manifest
-- Install prompts
+- CSS Grid e Flexbox
+- JavaScript ES6+
 
-## License
+## 📄 Licenza
 
-MIT License - feel free to use this project for your own purposes! 
+MIT License - Libero utilizzo per scopi personali e commerciali! 
