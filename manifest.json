@@ -1,7 +1,7 @@
 {
-  "name": "Calcolatrice PWA",
-  "short_name": "Calcolatrice",
-  "description": "Una calcolatrice moderna e funzionale",
+  "name": "Multi Calculator PWA",
+  "short_name": "Multi Calc",
+  "description": "Cinque calcolatori specializzati per calcoli termici e matematici",
   "start_url": "/",
   "display": "fullscreen",
   "orientation": "portrait",

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <meta name="description" content="Calcolatrice PWA - Una calcolatrice moderna e funzionale">
+    <meta name="description" content="Multi Calculator PWA - Cinque calcolatori specializzati">
     <meta name="theme-color" content="#2c3e50">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Calcolatrice">
+    <meta name="apple-mobile-web-app-title" content="Multi Calculator">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
     <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167x167.png">
     
-    <title>Calcolatrice PWA</title>
+    <title>Multi Calculator PWA</title>
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
@@ -32,24 +32,223 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            min-height: 100dvh; /* Dynamic viewport height for mobile */
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-            /* iOS safe area support */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-item {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .menu-item p {
+            opacity: 0.9;
+            font-size: 0.9rem;
         }
 
         .calculator {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+            margin: auto;
+        }
+
+        .calculator.active {
+            display: block;
+        }
+
+        .calculator-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .calculator-title {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .result {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .action-btn.reset {
+            background: #e74c3c;
+        }
+
+        .action-btn.save {
+            background: #f39c12;
+        }
+
+        .action-btn.load {
+            background: #9b59b6;
+        }
+
+        .calculate-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .simple-calculator {
+            display: none;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             padding: 20px;
             max-width: 350px;
             width: 100%;
-            /* Ensure calculator doesn't overlap with safe areas */
             margin: auto;
+        }
+
+        .simple-calculator.active {
+            display: block;
         }
 
         .display {
@@ -95,14 +294,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             color: #2c3e50;
-            /* Prevent text selection on mobile */
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -khtml-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            /* Prevent zoom on double tap */
             touch-action: manipulation;
         }
 
@@ -139,10 +336,6 @@
             grid-column: span 2;
         }
 
-        .btn.span-4 {
-            grid-column: span 4;
-        }
-
         .status {
             margin-top: 15px;
             padding: 10px;
@@ -162,39 +355,34 @@
             color: #721c24;
         }
 
-        /* iOS specific optimizations */
         @supports (-webkit-touch-callout: none) {
             body {
-                /* Prevent bounce scrolling on iOS */
                 position: fixed;
                 width: 100%;
                 height: 100%;
                 overflow: hidden;
             }
             
-            .calculator {
-                /* Ensure calculator is always visible */
+            .container, .calculator, .simple-calculator {
                 max-height: 90vh;
                 overflow-y: auto;
             }
         }
 
-        @media (max-width: 400px) {
-            .calculator {
-                padding: 15px;
+        @media (max-width: 600px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
             }
             
-            .btn {
-                padding: 15px;
-                font-size: 1.2rem;
+            .action-buttons {
+                grid-template-columns: 1fr;
             }
             
-            .current-operand {
-                font-size: 2rem;
+            .calculator-title {
+                font-size: 1.5rem;
             }
         }
 
-        /* Hide status bar on iOS when installed */
         @media screen and (display-mode: standalone) {
             body {
                 padding-top: env(safe-area-inset-top);
@@ -204,7 +392,274 @@
     </style>
 </head>
 <body>
-    <div class="calculator">
+    <!-- Main Menu -->
+    <div class="container" id="main-menu">
+        <div class="header">
+            <h1>🧮 Multi Calculator</h1>
+            <p>Seleziona il calcolatore che desideri utilizzare</p>
+        </div>
+        
+        <div class="menu-grid">
+            <div class="menu-item" onclick="showCalculator('heating')">
+                <h3>🔥 Heating Time Calculator</h3>
+                <p>Calcola il tempo necessario per riscaldare l'acqua</p>
+            </div>
+            
+            <div class="menu-item" onclick="showCalculator('power')">
+                <h3>⚡ Power Calculator</h3>
+                <p>Calcola la potenza necessaria per il riscaldamento</p>
+            </div>
+            
+            <div class="menu-item" onclick="showCalculator('cooling')">
+                <h3>❄️ Cooling Time Calculator</h3>
+                <p>Calcola il tempo di raffreddamento</p>
+            </div>
+            
+            <div class="menu-item" onclick="showCalculator('brewing')">
+                <h3>☕ Brewing Loss Calculator</h3>
+                <p>Calcola le perdite durante la preparazione</p>
+            </div>
+            
+            <div class="menu-item" onclick="showCalculator('simple')">
+                <h3>🔢 Simple Calculator</h3>
+                <p>Calcolatrice standard per operazioni base</p>
+            </div>
+        </div>
+        
+        <div id="status" class="status">
+            <span id="connection-status">Controllo connessione...</span>
+        </div>
+    </div>
+
+    <!-- Heating Time Calculator -->
+    <div class="calculator" id="heating-calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">🔥 Heating Time Calculator</div>
+            <button class="back-btn" onclick="showMenu()">← Menu</button>
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_initial_temp">Initial Temperature (°C)</label>
+            <input type="number" id="ht_initial_temp" value="50.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_target_temp">Target Temperature (°C)</label>
+            <input type="number" id="ht_target_temp" value="70.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_water_volume">Water Volume (L)</label>
+            <input type="number" id="ht_water_volume" value="5.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_heater_power">Heater Power (W)</label>
+            <input type="number" id="ht_heater_power" value="2000.0" step="1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_room_temp">Room Temperature (°C)</label>
+            <input type="number" id="ht_room_temp" value="20.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_heat_transfer_coeff">Heat Transfer Coefficient (W/m²·°C)</label>
+            <input type="number" id="ht_heat_transfer_coeff" value="15.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_surface_area">External Surface Area (m²)</label>
+            <input type="number" id="ht_surface_area" value="0.5" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <label for="ht_stainless_steel_volume">Stainless Steel Volume (m³)</label>
+            <input type="number" id="ht_stainless_steel_volume" value="0.001" step="0.0001">
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn reset" onclick="resetToDefault('heating')">Reset to Default</button>
+            <button class="action-btn save" onclick="saveParameters('heating')">Save Parameters</button>
+            <button class="action-btn load" onclick="loadParameters('heating')">Load Parameters</button>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculateHeatingTime()">Calculate Heating Time</button>
+        
+        <div class="result" id="heating-result" style="display: none;"></div>
+    </div>
+
+    <!-- Power Calculator -->
+    <div class="calculator" id="power-calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">⚡ Power Calculator</div>
+            <button class="back-btn" onclick="showMenu()">← Menu</button>
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_initial_temp">Initial Temperature (°C)</label>
+            <input type="number" id="pc_initial_temp" value="50.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_target_temp">Target Temperature (°C)</label>
+            <input type="number" id="pc_target_temp" value="70.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_water_volume">Water Volume (L)</label>
+            <input type="number" id="pc_water_volume" value="5.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_time_required">Time Required (seconds)</label>
+            <input type="number" id="pc_time_required" value="300.0" step="1">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_room_temp">Room Temperature (°C)</label>
+            <input type="number" id="pc_room_temp" value="20.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_heat_transfer_coeff">Heat Transfer Coefficient (W/m²·°C)</label>
+            <input type="number" id="pc_heat_transfer_coeff" value="15.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_surface_area">External Surface Area (m²)</label>
+            <input type="number" id="pc_surface_area" value="0.5" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <label for="pc_stainless_steel_volume">Stainless Steel Volume (m³)</label>
+            <input type="number" id="pc_stainless_steel_volume" value="0.001" step="0.0001">
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn reset" onclick="resetToDefault('power')">Reset to Default</button>
+            <button class="action-btn save" onclick="saveParameters('power')">Save Parameters</button>
+            <button class="action-btn load" onclick="loadParameters('power')">Load Parameters</button>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculatePower()">Calculate Required Power</button>
+        
+        <div class="result" id="power-result" style="display: none;"></div>
+    </div>
+
+    <!-- Cooling Time Calculator -->
+    <div class="calculator" id="cooling-calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">❄️ Cooling Time Calculator</div>
+            <button class="back-btn" onclick="showMenu()">← Menu</button>
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_initial_temp">Initial Temperature (°C)</label>
+            <input type="number" id="ct_initial_temp" value="70.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_final_temp">Final Temperature (°C)</label>
+            <input type="number" id="ct_final_temp" value="50.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_water_volume">Water Volume (L)</label>
+            <input type="number" id="ct_water_volume" value="5.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_room_temp">Room Temperature (°C)</label>
+            <input type="number" id="ct_room_temp" value="20.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_heat_transfer_coeff">Heat Transfer Coefficient (W/m²·°C)</label>
+            <input type="number" id="ct_heat_transfer_coeff" value="15.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_surface_area">External Surface Area (m²)</label>
+            <input type="number" id="ct_surface_area" value="0.5" step="0.01">
+        </div>
+        
+        <div class="input-group">
+            <label for="ct_stainless_steel_volume">Stainless Steel Volume (m³)</label>
+            <input type="number" id="ct_stainless_steel_volume" value="0.001" step="0.0001">
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn reset" onclick="resetToDefault('cooling')">Reset to Default</button>
+            <button class="action-btn save" onclick="saveParameters('cooling')">Save Parameters</button>
+            <button class="action-btn load" onclick="loadParameters('cooling')">Load Parameters</button>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculateCoolingTime()">Calculate Cooling Time</button>
+        
+        <div class="result" id="cooling-result" style="display: none;"></div>
+    </div>
+
+    <!-- Brewing Loss Calculator -->
+    <div class="calculator" id="brewing-calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">☕ Brewing Loss Calculator</div>
+            <button class="back-btn" onclick="showMenu()">← Menu</button>
+        </div>
+        
+        <div class="input-group">
+            <label for="br_initial_temp">Initial Temperature (°C)</label>
+            <input type="number" id="br_initial_temp" value="95.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="br_water_volume">Water Volume (L)</label>
+            <input type="number" id="br_water_volume" value="5.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="br_stainless_steel_volume">Stainless Steel Volume (m³)</label>
+            <input type="number" id="br_stainless_steel_volume" value="0.001" step="0.0001">
+        </div>
+        
+        <div class="input-group">
+            <label for="br_applied_heater_power">Applied Heater Power (W)</label>
+            <input type="number" id="br_applied_heater_power" value="0.0" step="1">
+        </div>
+        
+        <div class="input-group">
+            <label for="br_brewing_flow_rate">Brewing Flow Rate (ml/s)</label>
+            <input type="number" id="br_brewing_flow_rate" value="5.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="br_brewing_time_duration">Brewing Time Duration (s)</label>
+            <input type="number" id="br_brewing_time_duration" value="20.0" step="0.1">
+        </div>
+        
+        <div class="input-group">
+            <label for="br_plumbing_temperature">Brewing Plumbing Temperature (°C)</label>
+            <input type="number" id="br_plumbing_temperature" value="20.0" step="0.1">
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn reset" onclick="resetToDefault('brewing')">Reset to Default</button>
+            <button class="action-btn save" onclick="saveParameters('brewing')">Save Parameters</button>
+            <button class="action-btn load" onclick="loadParameters('brewing')">Load Parameters</button>
+        </div>
+        
+        <button class="calculate-btn" onclick="calculateBrewingLoss()">Calculate Brewing Loss</button>
+        
+        <div class="result" id="brewing-result" style="display: none;"></div>
+    </div>
+
+    <!-- Simple Calculator -->
+    <div class="simple-calculator" id="simple-calculator">
+        <div class="calculator-header">
+            <div class="calculator-title">🔢 Simple Calculator</div>
+            <button class="back-btn" onclick="showMenu()">← Menu</button>
+        </div>
+        
         <div class="display">
             <div class="previous-operand" id="previous-operand"></div>
             <div class="current-operand" id="current-operand">0</div>
@@ -235,13 +690,251 @@
             <button class="btn" onclick="appendDecimal()">.</button>
             <button class="btn equals span-2" onclick="compute()">=</button>
         </div>
-        
-        <div id="status" class="status">
-            <span id="connection-status">Controllo connessione...</span>
-        </div>
     </div>
 
     <script>
+        // Default values from calculator_config.ini
+        const defaultValues = {
+            // Heating Time Calculator
+            ht_initial_temp: 50.0,
+            ht_target_temp: 70.0,
+            ht_water_volume: 5.0,
+            ht_heater_power: 2000.0,
+            ht_room_temp: 20.0,
+            ht_heat_transfer_coeff: 15.0,
+            ht_surface_area: 0.5,
+            ht_stainless_steel_volume: 0.001,
+            
+            // Power Calculator
+            pc_initial_temp: 50.0,
+            pc_target_temp: 70.0,
+            pc_water_volume: 5.0,
+            pc_stainless_steel_volume: 0.001,
+            pc_time_required: 300.0,
+            pc_room_temp: 20.0,
+            pc_heat_transfer_coeff: 15.0,
+            pc_surface_area: 0.5,
+            
+            // Cooling Time Calculator
+            ct_initial_temp: 70.0,
+            ct_final_temp: 50.0,
+            ct_water_volume: 5.0,
+            ct_room_temp: 20.0,
+            ct_heat_transfer_coeff: 15.0,
+            ct_surface_area: 0.5,
+            ct_stainless_steel_volume: 0.001,
+            
+            // Brewing Loss Calculator
+            br_initial_temp: 95.0,
+            br_water_volume: 5.0,
+            br_stainless_steel_volume: 0.001,
+            br_applied_heater_power: 0.0,
+            br_brewing_flow_rate: 5.0,
+            br_brewing_time_duration: 20.0,
+            br_plumbing_temperature: 20.0
+        };
+
+        // Navigation functions
+        function showMenu() {
+            document.getElementById('main-menu').style.display = 'block';
+            document.querySelectorAll('.calculator, .simple-calculator').forEach(calc => {
+                calc.classList.remove('active');
+            });
+        }
+
+        function showCalculator(type) {
+            document.getElementById('main-menu').style.display = 'none';
+            document.querySelectorAll('.calculator, .simple-calculator').forEach(calc => {
+                calc.classList.remove('active');
+            });
+            
+            if (type === 'simple') {
+                document.getElementById('simple-calculator').classList.add('active');
+            } else {
+                document.getElementById(type + '-calculator').classList.add('active');
+            }
+        }
+
+        // Parameter management functions
+        function resetToDefault(calculatorType) {
+            const prefix = calculatorType === 'heating' ? 'ht_' : 
+                          calculatorType === 'power' ? 'pc_' : 
+                          calculatorType === 'cooling' ? 'ct_' : 'br_';
+            
+            Object.keys(defaultValues).forEach(key => {
+                if (key.startsWith(prefix)) {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        input.value = defaultValues[key];
+                    }
+                }
+            });
+            
+            showNotification('Parameters reset to default values');
+        }
+
+        function saveParameters(calculatorType) {
+            const prefix = calculatorType === 'heating' ? 'ht_' : 
+                          calculatorType === 'power' ? 'pc_' : 
+                          calculatorType === 'cooling' ? 'ct_' : 'br_';
+            
+            const params = {};
+            Object.keys(defaultValues).forEach(key => {
+                if (key.startsWith(prefix)) {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        params[key] = parseFloat(input.value) || 0;
+                    }
+                }
+            });
+            
+            localStorage.setItem('savedParams_' + calculatorType, JSON.stringify(params));
+            showNotification('Parameters saved successfully');
+        }
+
+        function loadParameters(calculatorType) {
+            const savedParams = localStorage.getItem('savedParams_' + calculatorType);
+            if (savedParams) {
+                const params = JSON.parse(savedParams);
+                Object.keys(params).forEach(key => {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        input.value = params[key];
+                    }
+                });
+                showNotification('Parameters loaded successfully');
+            } else {
+                showNotification('No saved parameters found');
+            }
+        }
+
+        function showNotification(message) {
+            // Create a simple notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #27ae60;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                z-index: 1000;
+                font-weight: bold;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Calculation functions
+        function calculateHeatingTime() {
+            const params = getCalculatorParams('ht_');
+            const result = calculateHeatingTimeFormula(params);
+            showResult('heating-result', `Heating Time: ${result.toFixed(2)} seconds (${(result/60).toFixed(2)} minutes)`);
+        }
+
+        function calculatePower() {
+            const params = getCalculatorParams('pc_');
+            const result = calculatePowerFormula(params);
+            showResult('power-result', `Required Power: ${result.toFixed(2)} W`);
+        }
+
+        function calculateCoolingTime() {
+            const params = getCalculatorParams('ct_');
+            const result = calculateCoolingTimeFormula(params);
+            showResult('cooling-result', `Cooling Time: ${result.toFixed(2)} seconds (${(result/60).toFixed(2)} minutes)`);
+        }
+
+        function calculateBrewingLoss() {
+            const params = getCalculatorParams('br_');
+            const result = calculateBrewingLossFormula(params);
+            showResult('brewing-result', `Brewing Loss: ${result.toFixed(2)} °C`);
+        }
+
+        function getCalculatorParams(prefix) {
+            const params = {};
+            Object.keys(defaultValues).forEach(key => {
+                if (key.startsWith(prefix)) {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        params[key] = parseFloat(input.value) || 0;
+                    }
+                }
+            });
+            return params;
+        }
+
+        function showResult(elementId, message) {
+            const resultElement = document.getElementById(elementId);
+            resultElement.textContent = message;
+            resultElement.style.display = 'block';
+        }
+
+        // Calculation formulas (simplified versions based on boiler_calculator.py)
+        function calculateHeatingTimeFormula(params) {
+            const waterMass = params.ht_water_volume * 1000; // kg
+            const steelMass = params.ht_stainless_steel_volume * 8000; // kg (density of steel)
+            const totalMass = waterMass + steelMass;
+            const specificHeat = 4200; // J/kg·°C for water
+            const steelSpecificHeat = 500; // J/kg·°C for steel
+            
+            const energyNeeded = (waterMass * specificHeat + steelMass * steelSpecificHeat) * 
+                                (params.ht_target_temp - params.ht_initial_temp);
+            const heatLoss = params.ht_heat_transfer_coeff * params.ht_surface_area * 
+                           (params.ht_target_temp - params.ht_room_temp);
+            
+            return energyNeeded / (params.ht_heater_power - heatLoss);
+        }
+
+        function calculatePowerFormula(params) {
+            const waterMass = params.pc_water_volume * 1000; // kg
+            const steelMass = params.pc_stainless_steel_volume * 8000; // kg
+            const totalMass = waterMass + steelMass;
+            const specificHeat = 4200; // J/kg·°C for water
+            const steelSpecificHeat = 500; // J/kg·°C for steel
+            
+            const energyNeeded = (waterMass * specificHeat + steelMass * steelSpecificHeat) * 
+                                (params.pc_target_temp - params.pc_initial_temp);
+            const heatLoss = params.pc_heat_transfer_coeff * params.pc_surface_area * 
+                           (params.pc_target_temp - params.pc_room_temp);
+            
+            return energyNeeded / params.pc_time_required + heatLoss;
+        }
+
+        function calculateCoolingTimeFormula(params) {
+            const waterMass = params.ct_water_volume * 1000; // kg
+            const steelMass = params.ct_stainless_steel_volume * 8000; // kg
+            const specificHeat = 4200; // J/kg·°C for water
+            const steelSpecificHeat = 500; // J/kg·°C for steel
+            
+            const totalHeatCapacity = waterMass * specificHeat + steelMass * steelSpecificHeat;
+            const heatLossRate = params.ct_heat_transfer_coeff * params.ct_surface_area * 
+                               ((params.ct_initial_temp + params.ct_final_temp) / 2 - params.ct_room_temp);
+            
+            return totalHeatCapacity * (params.ct_initial_temp - params.ct_final_temp) / heatLossRate;
+        }
+
+        function calculateBrewingLossFormula(params) {
+            const waterMass = params.br_water_volume * 1000; // kg
+            const steelMass = params.br_stainless_steel_volume * 8000; // kg
+            const specificHeat = 4200; // J/kg·°C for water
+            const steelSpecificHeat = 500; // J/kg·°C for steel
+            
+            const totalHeatCapacity = waterMass * specificHeat + steelMass * steelSpecificHeat;
+            const brewingVolume = params.br_brewing_flow_rate * params.br_brewing_time_duration / 1000; // L
+            const brewingMass = brewingVolume * 1000; // kg
+            
+            const energyLoss = brewingMass * specificHeat * (params.br_initial_temp - params.br_plumbing_temperature);
+            const temperatureLoss = energyLoss / totalHeatCapacity;
+            
+            return temperatureLoss;
+        }
+
+        // Simple Calculator (from previous implementation)
         class Calculator {
             constructor() {
                 this.previousOperand = '';
@@ -349,7 +1042,7 @@
 
         const calculator = new Calculator();
 
-        // Funzioni globali per i pulsanti
+        // Simple calculator functions
         function clearAll() {
             calculator.clear();
             calculator.updateDisplay();
@@ -380,7 +1073,7 @@
             calculator.updateDisplay();
         }
 
-        // Supporto per tastiera
+        // Keyboard support
         document.addEventListener('keydown', (event) => {
             const key = event.key;
             
@@ -408,7 +1101,7 @@
             }
         });
 
-        // Funzionalità PWA
+        // PWA functionality
         function updateConnectionStatus() {
             const statusElement = document.getElementById('connection-status');
             const statusDiv = document.getElementById('status');
@@ -422,21 +1115,17 @@
             }
         }
 
-        // Install prompt functionality
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
         });
 
-        // Event listeners
         window.addEventListener('online', updateConnectionStatus);
         window.addEventListener('offline', updateConnectionStatus);
         
-        // Initial status check
         updateConnectionStatus();
 
-        // Service Worker registration
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
                 .then((registration) => {
@@ -449,7 +1138,6 @@
 
         // iOS specific optimizations
         if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
-            // Prevent zoom on double tap
             let lastTouchEnd = 0;
             document.addEventListener('touchend', function (event) {
                 const now = (new Date()).getTime();
@@ -459,15 +1147,13 @@
                 lastTouchEnd = now;
             }, false);
 
-            // Hide Safari UI when in standalone mode
             if (window.navigator.standalone) {
                 document.body.classList.add('standalone');
             }
         }
 
-        // Prevent pull-to-refresh on mobile
         document.body.addEventListener('touchmove', function(e) {
-            if (e.target.closest('.calculator')) {
+            if (e.target.closest('.calculator, .simple-calculator')) {
                 e.preventDefault();
             }
         }, { passive: false });
