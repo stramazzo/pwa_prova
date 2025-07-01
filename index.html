@@ -411,7 +411,14 @@
             .calculator, .simple-calculator {
                 /* Ensure calculator can scroll */
                 max-height: none;
-                overflow-y: visible;
+                overflow-y: auto;
+                padding-bottom: 50px; /* Add extra padding for better scrolling */
+            }
+            
+            /* Ensure all content is scrollable */
+            .calculator.active, .simple-calculator.active {
+                overflow-y: auto;
+                max-height: none;
             }
         }
 
@@ -426,6 +433,16 @@
             
             .calculator-title {
                 font-size: 1.5rem;
+            }
+            
+            /* Improve scrolling on mobile devices */
+            .calculator, .simple-calculator {
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+            }
+            
+            .results-section {
+                margin-bottom: 30px; /* Add space at bottom for better scrolling */
             }
         }
 
@@ -1042,9 +1059,10 @@
                 
                 // Iterative calculation (same as Python)
                 let number_of_iterations = 0;
+                let total_energy_lost = 0; // Define this variable outside the loop
                 while (number_of_iterations < 10) {
                     let current_temp = params.pc_initial_temp;
-                    let total_energy_lost = 0;
+                    total_energy_lost = 0; // Reset for each iteration
                     let simulation_time = 0;
                     
                     while (simulation_time < params.pc_time_required && current_temp < params.pc_target_temp) {
@@ -1456,11 +1474,10 @@
             }
         }
 
+        // Allow scrolling on mobile devices
         document.body.addEventListener('touchmove', function(e) {
-            if (e.target.closest('.calculator, .simple-calculator')) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+            // Allow all touch movements for scrolling
+        }, { passive: true });
     </script>
 </body>
 </html> 
