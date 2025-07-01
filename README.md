@@ -1,4 +1,4 @@
-# Multi Calculator PWA
+# Boiler Calculator PWA
 
 Una Progressive Web App (PWA) con cinque calcolatori specializzati per calcoli termici e matematici, basata sui file `boiler_calculator.py` e `calculator_config.ini`.
 
@@ -110,7 +110,7 @@ Perdita = Energia_Perduta / Capacità_Termica_Totale
 
 ```
 pwa_prova/
-├── index.html              # Multi Calculator PWA principale
+├── index.html              # Boiler Calculator PWA principale
 ├── manifest.json           # Configurazione PWA
 ├── sw.js                  # Service Worker
 ├── boiler_calculator.py    # File di riferimento Python

@@ -1,6 +1,6 @@
 {
-  "name": "Multi Calculator PWA",
-  "short_name": "Multi Calc",
+  "name": "Boiler Calculator PWA",
+  "short_name": "Boiler Calc",
   "description": "Cinque calcolatori specializzati per calcoli termici e matematici",
   "start_url": "/",
   "display": "fullscreen",
