@@ -1,10 +1,10 @@
-THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <meta name="description" content="Boiler Calculator PWA - Cinque calcolatori specializzati">
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#1a1a1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Boiler Calculator">
@@ -132,13 +132,14 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
 
         .calculator {
             display: none;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+            padding: 32px;
             max-width: 600px;
             width: 100%;
             margin: auto;
+            border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .calculator.active {
@@ -149,91 +150,99 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #ecf0f1;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
         }
 
         .calculator-title {
-            font-size: 1.8rem;
-            color: #2c3e50;
-            font-weight: bold;
+            font-size: 1.5rem;
+            color: #1a1a1a;
+            font-weight: 600;
+            letter-spacing: -0.01em;
         }
 
         .back-btn {
-            background: #e74c3c;
+            background: #6b7280;
             color: white;
             border: none;
-            padding: 10px 15px;
-            border-radius: 10px;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .back-btn:hover {
-            background: #c0392b;
-            transform: translateY(-2px);
+            background: #4b5563;
+            transform: translateY(-1px);
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .input-group label {
             display: block;
             margin-bottom: 8px;
-            color: #2c3e50;
-            font-weight: bold;
-            font-size: 0.9rem;
+            color: #374151;
+            font-weight: 500;
+            font-size: 0.875rem;
+            line-height: 1.4;
         }
 
         .input-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ecf0f1;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            color: #1a1a1a;
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
         }
 
         .result {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%);
             color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
+            padding: 20px 24px;
+            border-radius: 12px;
+            margin: 24px 0;
             text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1.125rem;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
         .results-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border: 2px solid #e9ecef;
+            margin-top: 24px;
+            padding: 24px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
 
         .results-section h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
             text-align: center;
-            font-size: 1.3rem;
+            font-size: 1.125rem;
+            font-weight: 600;
         }
 
         .result-group {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #dee2e6;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .result-group:last-child {
@@ -241,85 +250,108 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         }
 
         .result-group label {
-            font-weight: bold;
-            color: #495057;
+            font-weight: 500;
+            color: #374151;
             flex: 1;
-            margin-right: 15px;
+            margin-right: 16px;
+            font-size: 0.875rem;
         }
 
         .result-value {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%);
             color: white;
             padding: 8px 12px;
-            border-radius: 8px;
-            font-weight: bold;
+            border-radius: 6px;
+            font-weight: 600;
             min-width: 80px;
             text-align: center;
+            font-size: 0.875rem;
         }
 
         .action-buttons {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .action-btn {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            padding: 12px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #e5e7eb;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .action-btn.reset {
-            background: #e74c3c;
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: rgba(220, 38, 38, 0.2);
+        }
+
+        .action-btn.reset:hover {
+            background: #fee2e2;
         }
 
         .action-btn.save {
-            background: #f39c12;
+            background: #fefbf2;
+            color: #d97706;
+            border-color: rgba(217, 119, 6, 0.2);
+        }
+
+        .action-btn.save:hover {
+            background: #fef3c7;
         }
 
         .action-btn.load {
-            background: #9b59b6;
+            background: #f5f3ff;
+            color: #7c3aed;
+            border-color: rgba(124, 58, 237, 0.2);
+        }
+
+        .action-btn.load:hover {
+            background: #ede9fe;
         }
 
         .calculate-btn {
-            background: linear-gradient(45deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 16px 24px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 600;
             width: 100%;
-            transition: all 0.3s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.2);
         }
 
         .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(211, 47, 47, 0.3);
         }
 
         .simple-calculator {
             display: none;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+            padding: 32px;
             max-width: 350px;
             width: 100%;
             margin: auto;
+            border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .simple-calculator.active {
@@ -327,48 +359,51 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         }
 
         .display {
-            background: #2c3e50;
+            background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%);
             color: white;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
             text-align: right;
-            min-height: 80px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
         .previous-operand {
-            font-size: 1.2rem;
-            color: #bdc3c7;
-            margin-bottom: 5px;
+            font-size: 1rem;
+            color: #9ca3af;
+            margin-bottom: 8px;
             min-height: 1.5rem;
+            font-weight: 400;
         }
 
         .current-operand {
-            font-size: 2.5rem;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 600;
             word-wrap: break-word;
             word-break: break-all;
+            line-height: 1.2;
         }
 
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
 
         .btn {
-            background: #ecf0f1;
-            border: none;
-            border-radius: 15px;
+            background: #f9fafb;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
             padding: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-size: 1.25rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            color: #2c3e50;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: #1a1a1a;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -khtml-user-select: none;
@@ -379,8 +414,9 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #f3f4f6;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .btn:active {
@@ -388,23 +424,43 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         }
 
         .btn.operator {
-            background: #3498db;
+            background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%);
             color: white;
+            border-color: transparent;
+        }
+
+        .btn.operator:hover {
+            box-shadow: 0 4px 16px rgba(211, 47, 47, 0.3);
         }
 
         .btn.equals {
-            background: #27ae60;
+            background: linear-gradient(135deg, #1a1a1a 0%, #374151 100%);
             color: white;
+            border-color: transparent;
+        }
+
+        .btn.equals:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         }
 
         .btn.clear {
-            background: #e74c3c;
-            color: white;
+            background: #fef2f2;
+            color: #dc2626;
+            border-color: rgba(220, 38, 38, 0.2);
+        }
+
+        .btn.clear:hover {
+            background: #fee2e2;
         }
 
         .btn.delete {
-            background: #f39c12;
-            color: white;
+            background: #fefbf2;
+            color: #d97706;
+            border-color: rgba(217, 119, 6, 0.2);
+        }
+
+        .btn.delete:hover {
+            background: #fef3c7;
         }
 
         .btn.span-2 {
@@ -412,22 +468,24 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         }
 
         .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 10px;
+            margin-top: 20px;
+            padding: 12px 16px;
+            border-radius: 8px;
             text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
+            font-weight: 500;
+            font-size: 0.875rem;
         }
 
         .online {
-            background: #d4edda;
-            color: #155724;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid rgba(22, 101, 52, 0.2);
         }
 
         .offline {
-            background: #f8d7da;
-            color: #721c24;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid rgba(220, 38, 38, 0.2);
         }
 
         @supports (-webkit-touch-callout: none) {
