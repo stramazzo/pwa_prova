@@ -314,11 +314,18 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .action-btn.reset,
-        .action-btn.save,
+        .action-btn.reset {
+            background: #e74c3c;
+        }
+
+        .action-btn.save {
+            background: #e8e8e8;
+            color: #666;
+        }
+
         .action-btn.load {
-            background: #27ae60;
-            color: white;
+            background: #f5f5f5;
+            color: #666;
         }
 
         .calculate-btn {
@@ -1104,14 +1111,14 @@
         // Navigation functions
         function showMenu() {
             document.getElementById('main-menu').style.display = 'block';
-            document.querySelectorAll('.calculator, .simple-calculator').forEach(calc => {
+            document.querySelectorAll('.calculator, .simple-calculator').forEach(function(calc) {
                 calc.classList.remove('active');
             });
         }
 
         function showCalculator(type) {
             document.getElementById('main-menu').style.display = 'none';
-            document.querySelectorAll('.calculator, .simple-calculator').forEach(calc => {
+            document.querySelectorAll('.calculator, .simple-calculator').forEach(function(calc) {
                 calc.classList.remove('active');
             });
             
@@ -1128,7 +1135,7 @@
                           calculatorType === 'power' ? 'pc_' : 
                           calculatorType === 'cooling' ? 'ct_' : 'br_';
             
-            Object.keys(defaultValues).forEach(key => {
+            Object.keys(defaultValues).forEach(function(key) {
                 if (key.startsWith(prefix)) {
                     const input = document.getElementById(key);
                     if (input) {
@@ -1138,15 +1145,19 @@
             });
             
             // Reset unit selections to default values (m² and m³)
-            const surfaceAreaUnitSelect = document.getElementById(prefix + 'surface_area_unit');
-            if (surfaceAreaUnitSelect) {
-                surfaceAreaUnitSelect.value = 'm2';
-                const surfaceAreaInput = document.getElementById(prefix + 'surface_area');
-                if (surfaceAreaInput) {
-                    surfaceAreaInput.dataset.currentUnit = 'm2';
+            // Surface area unit (only for heating, power, and cooling calculators)
+            if (calculatorType !== 'brewing') {
+                const surfaceAreaUnitSelect = document.getElementById(prefix + 'surface_area_unit');
+                if (surfaceAreaUnitSelect) {
+                    surfaceAreaUnitSelect.value = 'm2';
+                    const surfaceAreaInput = document.getElementById(prefix + 'surface_area');
+                    if (surfaceAreaInput) {
+                        surfaceAreaInput.dataset.currentUnit = 'm2';
+                    }
                 }
             }
             
+            // Volume unit (all calculators have this)
             const volumeUnitSelect = document.getElementById(prefix + 'stainless_steel_volume_unit');
             if (volumeUnitSelect) {
                 volumeUnitSelect.value = 'm3';
@@ -1165,7 +1176,7 @@
                           calculatorType === 'cooling' ? 'ct_' : 'br_';
             
             const params = {};
-            Object.keys(defaultValues).forEach(key => {
+            Object.keys(defaultValues).forEach(function(key) {
                 if (key.startsWith(prefix)) {
                     const input = document.getElementById(key);
                     if (input) {
@@ -1197,7 +1208,7 @@
                               calculatorType === 'power' ? 'pc_' : 
                               calculatorType === 'cooling' ? 'ct_' : 'br_';
                 
-                Object.keys(params).forEach(key => {
+                Object.keys(params).forEach(function(key) {
                     const element = document.getElementById(key);
                     if (element) {
                         if (key.endsWith('_unit')) {
@@ -1230,22 +1241,14 @@
         function showNotification(message) {
             // Create a simple notification
             const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #27ae60;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                z-index: 1000;
-                font-weight: bold;
-            `;
+            notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #27ae60; color: white; padding: 15px 20px; border-radius: 10px; z-index: 1000; font-weight: bold;';
             notification.textContent = message;
             document.body.appendChild(notification);
             
-            setTimeout(() => {
-                notification.remove();
+            setTimeout(function() {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
             }, 3000);
         }
 
@@ -1297,7 +1300,7 @@
                 } else {
                     const minutes = Math.floor(total_time / 60);
                     const seconds = Math.floor(total_time % 60);
-                    formatted_result = `${minutes}m ${seconds}s`;
+                    formatted_result = minutes + 'm ' + seconds + 's';
                     seconds_result = total_time.toFixed(1);
                 }
                 
@@ -1440,7 +1443,7 @@
                 } else {
                     const minutes = Math.floor(total_time / 60);
                     const seconds = Math.floor(total_time % 60);
-                    formatted_result = `${minutes}m ${seconds}s`;
+                    formatted_result = minutes + 'm ' + seconds + 's';
                     seconds_result = total_time.toFixed(1);
                 }
                 
@@ -1530,7 +1533,7 @@
 
         function getCalculatorParams(prefix) {
             const params = {};
-            Object.keys(defaultValues).forEach(key => {
+            Object.keys(defaultValues).forEach(function(key) {
                 if (key.startsWith(prefix)) {
                     const input = document.getElementById(key);
                     if (input) {
@@ -1632,7 +1635,7 @@
                 }
                 
                 if (decimalDigits != null) {
-                    return `${integerDisplay}.${decimalDigits}`;
+                    return integerDisplay + '.' + decimalDigits;
                 } else {
                     return integerDisplay;
                 }
@@ -1642,7 +1645,7 @@
                 document.getElementById('current-operand').innerText = this.getDisplayNumber(this.currentOperand);
                 if (this.operation != null) {
                     document.getElementById('previous-operand').innerText = 
-                        `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+                        this.getDisplayNumber(this.previousOperand) + ' ' + this.operation;
                 } else {
                     document.getElementById('previous-operand').innerText = '';
                 }
@@ -1683,7 +1686,7 @@
         }
 
         // Keyboard support
-        document.addEventListener('keydown', (event) => {
+        document.addEventListener('keydown', function(event) {
             const key = event.key;
             
             if (key >= '0' && key <= '9') {
@@ -1713,7 +1716,7 @@
         // Initialize unit tracking
         function initializeUnits() {
             // Initialize all surface area fields to m2
-            ['ht', 'pc', 'ct'].forEach(prefix => {
+            ['ht', 'pc', 'ct'].forEach(function(prefix) {
                 const surfaceInput = document.getElementById(prefix + '_surface_area');
                 if (surfaceInput) {
                     surfaceInput.dataset.currentUnit = 'm2';
@@ -1721,7 +1724,7 @@
             });
             
             // Initialize all volume fields to m3
-            ['ht', 'pc', 'ct', 'br'].forEach(prefix => {
+            ['ht', 'pc', 'ct', 'br'].forEach(function(prefix) {
                 const volumeInput = document.getElementById(prefix + '_stainless_steel_volume');
                 if (volumeInput) {
                     volumeInput.dataset.currentUnit = 'm3';
@@ -1732,7 +1735,7 @@
         // PWA functionality
 
         let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
+        window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
             deferredPrompt = e;
         });
