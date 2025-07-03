@@ -2,12 +2,12 @@
   "name": "Boiler Calculator PWA",
   "short_name": "Boiler Calc",
   "description": "Cinque calcolatori specializzati per calcoli termici e matematici",
-  "start_url": "/",
+  "start_url": "/pwa_prova/",
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#2c3e50",
   "background_color": "#667eea",
-  "scope": "/",
+  "scope": "/pwa_prova/",
   "lang": "it",
   "categories": ["utilities", "productivity"],
   "icons": [
@@ -34,7 +34,7 @@
       "name": "Calcola",
       "short_name": "Calcola",
       "description": "Apri la calcolatrice",
-      "url": "/",
+      "url": "/pwa_prova/",
       "icons": [
         {
           "src": "icon-192x192.png",
