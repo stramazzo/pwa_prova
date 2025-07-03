@@ -1,8 +1,8 @@
 const CACHE_NAME = 'calcolatrice-pwa-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  '/pwa_prova/',
+  '/pwa_prova/index.html',
+  '/pwa_prova/manifest.json'
 ];
 
 // Install event - cache resources
