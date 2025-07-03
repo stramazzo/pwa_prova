@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -314,18 +314,11 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .action-btn.reset {
-            background: #e74c3c;
-        }
-
-        .action-btn.save {
-            background: #e8e8e8;
-            color: #666;
-        }
-
+        .action-btn.reset,
+        .action-btn.save,
         .action-btn.load {
-            background: #f5f5f5;
-            color: #666;
+            background: #27ae60;
+            color: white;
         }
 
         .calculate-btn {
@@ -446,24 +439,7 @@
             grid-column: span 2;
         }
 
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
 
-        .online {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .offline {
-            background: #f8d7da;
-            color: #721c24;
-        }
 
         @supports (-webkit-touch-callout: none) {
             body {
@@ -619,10 +595,6 @@
                 <h3>🔢 Simple Calculator</h3>
                 <p>Calcolatrice standard per operazioni base</p>
             </div>
-        </div>
-        
-        <div id="status" class="status">
-            <span id="connection-status">Controllo connessione...</span>
         </div>
     </div>
 
@@ -1183,6 +1155,17 @@
                 }
             });
             
+            // Save unit selections for surface area and volume
+            const surfaceAreaUnitSelect = document.getElementById(prefix + 'surface_area_unit');
+            if (surfaceAreaUnitSelect) {
+                params[prefix + 'surface_area_unit'] = surfaceAreaUnitSelect.value;
+            }
+            
+            const volumeUnitSelect = document.getElementById(prefix + 'stainless_steel_volume_unit');
+            if (volumeUnitSelect) {
+                params[prefix + 'stainless_steel_volume_unit'] = volumeUnitSelect.value;
+            }
+            
             localStorage.setItem('savedParams_' + calculatorType, JSON.stringify(params));
             showNotification('Parameters saved successfully');
         }
@@ -1706,18 +1689,6 @@
         }
 
         // PWA functionality
-        function updateConnectionStatus() {
-            const statusElement = document.getElementById('connection-status');
-            const statusDiv = document.getElementById('status');
-            
-            if (navigator.onLine) {
-                statusElement.textContent = '🟢 Online';
-                statusDiv.className = 'status online';
-            } else {
-                statusElement.textContent = '🔴 Offline';
-                statusDiv.className = 'status offline';
-            }
-        }
 
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -1725,10 +1696,6 @@
             deferredPrompt = e;
         });
 
-        window.addEventListener('online', updateConnectionStatus);
-        window.addEventListener('offline', updateConnectionStatus);
-        
-        updateConnectionStatus();
         initializeUnits();
 
         if ('serviceWorker' in navigator) {
