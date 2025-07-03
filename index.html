@@ -1,4 +1,4 @@
-THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -1137,6 +1137,25 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
                 }
             });
             
+            // Reset unit selections to default values (m² and m³)
+            const surfaceAreaUnitSelect = document.getElementById(prefix + 'surface_area_unit');
+            if (surfaceAreaUnitSelect) {
+                surfaceAreaUnitSelect.value = 'm2';
+                const surfaceAreaInput = document.getElementById(prefix + 'surface_area');
+                if (surfaceAreaInput) {
+                    surfaceAreaInput.dataset.currentUnit = 'm2';
+                }
+            }
+            
+            const volumeUnitSelect = document.getElementById(prefix + 'stainless_steel_volume_unit');
+            if (volumeUnitSelect) {
+                volumeUnitSelect.value = 'm3';
+                const volumeInput = document.getElementById(prefix + 'stainless_steel_volume');
+                if (volumeInput) {
+                    volumeInput.dataset.currentUnit = 'm3';
+                }
+            }
+            
             showNotification('Parameters reset to default values');
         }
 
@@ -1174,10 +1193,32 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
             const savedParams = localStorage.getItem('savedParams_' + calculatorType);
             if (savedParams) {
                 const params = JSON.parse(savedParams);
+                const prefix = calculatorType === 'heating' ? 'ht_' : 
+                              calculatorType === 'power' ? 'pc_' : 
+                              calculatorType === 'cooling' ? 'ct_' : 'br_';
+                
                 Object.keys(params).forEach(key => {
-                    const input = document.getElementById(key);
-                    if (input) {
-                        input.value = params[key];
+                    const element = document.getElementById(key);
+                    if (element) {
+                        if (key.endsWith('_unit')) {
+                            // This is a unit selector (dropdown)
+                            element.value = params[key];
+                            // Update the corresponding input's data attribute and trigger conversion
+                            if (key.includes('surface_area_unit')) {
+                                const input = document.getElementById(key.replace('_unit', ''));
+                                if (input) {
+                                    input.dataset.currentUnit = params[key];
+                                }
+                            } else if (key.includes('stainless_steel_volume_unit')) {
+                                const input = document.getElementById(key.replace('_unit', ''));
+                                if (input) {
+                                    input.dataset.currentUnit = params[key];
+                                }
+                            }
+                        } else {
+                            // This is a numeric input
+                            element.value = params[key];
+                        }
                     }
                 });
                 showNotification('Parameters loaded successfully');
