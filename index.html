@@ -1,4 +1,4 @@
-THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -298,7 +298,7 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         }
 
         .action-btn {
-            background: #27ae60;
+            background: #6c757d;
             color: white;
             border: none;
             padding: 12px;
@@ -317,7 +317,7 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
         .action-btn.reset,
         .action-btn.save,
         .action-btn.load {
-            background: #27ae60;
+            background: #6c757d;
             color: white;
         }
 
@@ -1136,6 +1136,27 @@ THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
                     }
                 }
             });
+            
+            // Reset unit selectors to default values (meters)
+            const surfaceAreaUnitSelect = document.getElementById(prefix + 'surface_area_unit');
+            if (surfaceAreaUnitSelect) {
+                surfaceAreaUnitSelect.value = 'm2';
+                // Reset the dataset to ensure proper conversion tracking
+                const surfaceAreaInput = document.getElementById(prefix + 'surface_area');
+                if (surfaceAreaInput) {
+                    surfaceAreaInput.dataset.currentUnit = 'm2';
+                }
+            }
+            
+            const volumeUnitSelect = document.getElementById(prefix + 'stainless_steel_volume_unit');
+            if (volumeUnitSelect) {
+                volumeUnitSelect.value = 'm3';
+                // Reset the dataset to ensure proper conversion tracking
+                const volumeInput = document.getElementById(prefix + 'stainless_steel_volume');
+                if (volumeInput) {
+                    volumeInput.dataset.currentUnit = 'm3';
+                }
+            }
             
             showNotification('Parameters reset to default values');
         }
