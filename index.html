@@ -13,10 +13,10 @@
     <meta name="msapplication-tap-highlight" content="no">
     
     <!-- iOS Icons -->
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167x167.png">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <link rel="apple-touch-icon" sizes="152x152" href="icon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.svg">
+    <link rel="apple-touch-icon" sizes="167x167" href="icon.svg">
     
     <title>Boiler Calculator PWA</title>
     <link rel="manifest" href="manifest.json">
@@ -202,6 +202,32 @@
             border-color: #3498db;
         }
 
+        .input-with-unit {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-with-unit input {
+            flex: 1;
+        }
+
+        .unit-select {
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            color: #2c3e50;
+            min-width: 80px;
+            transition: border-color 0.3s ease;
+        }
+
+        .unit-select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
         .result {
             background: #2c3e50;
             color: white;
@@ -282,15 +308,18 @@
         }
 
         .action-btn.reset {
-            background: #e74c3c;
+            background: #95a5a6;
+            color: #2c3e50;
         }
 
         .action-btn.save {
-            background: #f39c12;
+            background: #ecf0f1;
+            color: #2c3e50;
         }
 
         .action-btn.load {
-            background: #9b59b6;
+            background: #bdc3c7;
+            color: #2c3e50;
         }
 
         .calculate-btn {
@@ -411,24 +440,7 @@
             grid-column: span 2;
         }
 
-        .status {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
 
-        .online {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .offline {
-            background: #f8d7da;
-            color: #721c24;
-        }
 
         @supports (-webkit-touch-callout: none) {
             body {
@@ -489,7 +501,28 @@
     <!-- Main Menu -->
     <div class="container" id="main-menu">
         <div class="header">
-            <h1>🔥 Boiler Calculator</h1>
+            <h1><svg width="40" height="40" viewBox="0 0 40 40" style="vertical-align: middle; margin-right: 8px;">
+                <!-- Coffee cup -->
+                <path d="M8 12h20c2 0 4 2 4 4v8c0 4-3 7-7 7H15c-4 0-7-3-7-7v-8c0-2 2-4 4-4z" fill="#8B4513" stroke="#654321" stroke-width="1"/>
+                <ellipse cx="18" cy="12" rx="10" ry="2" fill="#3E2723"/>
+                <path d="M28 16h3c1.5 0 3 1.5 3 3v2c0 1.5-1.5 3-3 3h-3" fill="none" stroke="#654321" stroke-width="1.5"/>
+                <!-- Calculator display -->
+                <rect x="10" y="18" width="16" height="3" fill="#2c3e50" rx="1"/>
+                <rect x="11" y="18.5" width="14" height="2" fill="#34495e" rx="0.5"/>
+                <!-- Calculator buttons -->
+                <circle cx="12" cy="23" r="1" fill="#ecf0f1"/>
+                <circle cx="15" cy="23" r="1" fill="#ecf0f1"/>
+                <circle cx="18" cy="23" r="1" fill="#ecf0f1"/>
+                <circle cx="21" cy="23" r="1" fill="#3498db"/>
+                <circle cx="12" cy="26" r="1" fill="#ecf0f1"/>
+                <circle cx="15" cy="26" r="1" fill="#ecf0f1"/>
+                <circle cx="18" cy="26" r="1" fill="#ecf0f1"/>
+                <circle cx="21" cy="26" r="1" fill="#3498db"/>
+                <!-- Steam -->
+                <path d="M14 8 Q16 6 14 4" fill="none" stroke="#bdc3c7" stroke-width="1" opacity="0.7"/>
+                <path d="M18 8 Q20 6 18 4" fill="none" stroke="#bdc3c7" stroke-width="1" opacity="0.7"/>
+                <path d="M22 8 Q24 6 22 4" fill="none" stroke="#bdc3c7" stroke-width="1" opacity="0.7"/>
+            </svg> Boiler Calculator</h1>
             <p>Seleziona il calcolatore che desideri utilizzare</p>
         </div>
         
@@ -518,10 +551,6 @@
                 <h3>🔢 Simple Calculator</h3>
                 <p>Calcolatrice standard per operazioni base</p>
             </div>
-        </div>
-        
-        <div id="status" class="status">
-            <span id="connection-status">Controllo connessione...</span>
         </div>
     </div>
 
@@ -563,13 +592,25 @@
         </div>
         
         <div class="input-group">
-            <label for="ht_surface_area">External Surface Area (m²)</label>
-            <input type="number" id="ht_surface_area" value="0.5" step="0.01">
+            <label for="ht_surface_area">External Surface Area</label>
+            <div class="input-with-unit">
+                <input type="number" id="ht_surface_area" value="0.5" step="0.01">
+                <select class="unit-select" id="ht_surface_area_unit" onchange="convertAreaUnit('ht_surface_area', this.value)">
+                    <option value="m2">m²</option>
+                    <option value="cm2">cm²</option>
+                </select>
+            </div>
         </div>
         
         <div class="input-group">
-            <label for="ht_stainless_steel_volume">Stainless Steel Volume (m³)</label>
-            <input type="number" id="ht_stainless_steel_volume" value="0.001" step="0.0001">
+            <label for="ht_stainless_steel_volume">Stainless Steel Volume</label>
+            <div class="input-with-unit">
+                <input type="number" id="ht_stainless_steel_volume" value="0.001" step="0.0001">
+                <select class="unit-select" id="ht_stainless_steel_volume_unit" onchange="convertVolumeUnit('ht_stainless_steel_volume', this.value)">
+                    <option value="m3">m³</option>
+                    <option value="cm3">cm³</option>
+                </select>
+            </div>
         </div>
         
         <div class="action-buttons">
@@ -631,13 +672,25 @@
         </div>
         
         <div class="input-group">
-            <label for="pc_surface_area">External Surface Area (m²)</label>
-            <input type="number" id="pc_surface_area" value="0.5" step="0.01">
+            <label for="pc_surface_area">External Surface Area</label>
+            <div class="input-with-unit">
+                <input type="number" id="pc_surface_area" value="0.5" step="0.01">
+                <select class="unit-select" id="pc_surface_area_unit" onchange="convertAreaUnit('pc_surface_area', this.value)">
+                    <option value="m2">m²</option>
+                    <option value="cm2">cm²</option>
+                </select>
+            </div>
         </div>
         
         <div class="input-group">
-            <label for="pc_stainless_steel_volume">Stainless Steel Volume (m³)</label>
-            <input type="number" id="pc_stainless_steel_volume" value="0.001" step="0.0001">
+            <label for="pc_stainless_steel_volume">Stainless Steel Volume</label>
+            <div class="input-with-unit">
+                <input type="number" id="pc_stainless_steel_volume" value="0.001" step="0.0001">
+                <select class="unit-select" id="pc_stainless_steel_volume_unit" onchange="convertVolumeUnit('pc_stainless_steel_volume', this.value)">
+                    <option value="m3">m³</option>
+                    <option value="cm3">cm³</option>
+                </select>
+            </div>
         </div>
         
         <div class="action-buttons">
@@ -706,13 +759,25 @@
         </div>
         
         <div class="input-group">
-            <label for="ct_surface_area">External Surface Area (m²)</label>
-            <input type="number" id="ct_surface_area" value="0.5" step="0.01">
+            <label for="ct_surface_area">External Surface Area</label>
+            <div class="input-with-unit">
+                <input type="number" id="ct_surface_area" value="0.5" step="0.01">
+                <select class="unit-select" id="ct_surface_area_unit" onchange="convertAreaUnit('ct_surface_area', this.value)">
+                    <option value="m2">m²</option>
+                    <option value="cm2">cm²</option>
+                </select>
+            </div>
         </div>
         
         <div class="input-group">
-            <label for="ct_stainless_steel_volume">Stainless Steel Volume (m³)</label>
-            <input type="number" id="ct_stainless_steel_volume" value="0.001" step="0.0001">
+            <label for="ct_stainless_steel_volume">Stainless Steel Volume</label>
+            <div class="input-with-unit">
+                <input type="number" id="ct_stainless_steel_volume" value="0.001" step="0.0001">
+                <select class="unit-select" id="ct_stainless_steel_volume_unit" onchange="convertVolumeUnit('ct_stainless_steel_volume', this.value)">
+                    <option value="m3">m³</option>
+                    <option value="cm3">cm³</option>
+                </select>
+            </div>
         </div>
         
         <div class="action-buttons">
@@ -766,8 +831,14 @@
         </div>
         
         <div class="input-group">
-            <label for="br_stainless_steel_volume">Stainless Steel Volume (m³)</label>
-            <input type="number" id="br_stainless_steel_volume" value="0.001" step="0.0001">
+            <label for="br_stainless_steel_volume">Stainless Steel Volume</label>
+            <div class="input-with-unit">
+                <input type="number" id="br_stainless_steel_volume" value="0.001" step="0.0001">
+                <select class="unit-select" id="br_stainless_steel_volume_unit" onchange="convertVolumeUnit('br_stainless_steel_volume', this.value)">
+                    <option value="m3">m³</option>
+                    <option value="cm3">cm³</option>
+                </select>
+            </div>
         </div>
         
         <div class="input-group">
@@ -1278,11 +1349,69 @@
                 if (key.startsWith(prefix)) {
                     const input = document.getElementById(key);
                     if (input) {
-                        params[key] = parseFloat(input.value) || 0;
+                        let value = parseFloat(input.value) || 0;
+                        
+                        // Convert to meters/m² based on unit selection
+                        if (key.includes('surface_area')) {
+                            const unitSelect = document.getElementById(key + '_unit');
+                            if (unitSelect && unitSelect.value === 'cm2') {
+                                value = value / 10000; // Convert cm² to m²
+                            }
+                        } else if (key.includes('stainless_steel_volume')) {
+                            const unitSelect = document.getElementById(key + '_unit');
+                            if (unitSelect && unitSelect.value === 'cm3') {
+                                value = value / 1000000; // Convert cm³ to m³
+                            }
+                        }
+                        
+                        params[key] = value;
                     }
                 }
             });
             return params;
+        }
+
+        // Unit conversion functions
+        function convertAreaUnit(inputId, newUnit) {
+            const input = document.getElementById(inputId);
+            let currentValue = parseFloat(input.value) || 0;
+            
+            // Get current unit from stored data attribute or default to m2
+            const currentUnit = input.dataset.unit || 'm2';
+            
+            if (currentUnit !== newUnit) {
+                if (currentUnit === 'm2' && newUnit === 'cm2') {
+                    // Convert m² to cm²
+                    currentValue = currentValue * 10000;
+                } else if (currentUnit === 'cm2' && newUnit === 'm2') {
+                    // Convert cm² to m²
+                    currentValue = currentValue / 10000;
+                }
+                
+                input.value = currentValue.toFixed(currentUnit === 'm2' ? 2 : 0);
+                input.dataset.unit = newUnit;
+            }
+        }
+
+        function convertVolumeUnit(inputId, newUnit) {
+            const input = document.getElementById(inputId);
+            let currentValue = parseFloat(input.value) || 0;
+            
+            // Get current unit from stored data attribute or default to m3
+            const currentUnit = input.dataset.unit || 'm3';
+            
+            if (currentUnit !== newUnit) {
+                if (currentUnit === 'm3' && newUnit === 'cm3') {
+                    // Convert m³ to cm³
+                    currentValue = currentValue * 1000000;
+                } else if (currentUnit === 'cm3' && newUnit === 'm3') {
+                    // Convert cm³ to m³
+                    currentValue = currentValue / 1000000;
+                }
+                
+                input.value = currentValue.toFixed(currentUnit === 'm3' ? 4 : 0);
+                input.dataset.unit = newUnit;
+            }
         }
 
 
@@ -1455,18 +1584,6 @@
         });
 
         // PWA functionality
-        function updateConnectionStatus() {
-            const statusElement = document.getElementById('connection-status');
-            const statusDiv = document.getElementById('status');
-            
-            if (navigator.onLine) {
-                statusElement.textContent = '🟢 Online';
-                statusDiv.className = 'status online';
-            } else {
-                statusElement.textContent = '🔴 Offline';
-                statusDiv.className = 'status offline';
-            }
-        }
 
         let deferredPrompt;
         window.addEventListener('beforeinstallprompt', (e) => {
@@ -1474,10 +1591,22 @@
             deferredPrompt = e;
         });
 
-        window.addEventListener('online', updateConnectionStatus);
-        window.addEventListener('offline', updateConnectionStatus);
-        
-        updateConnectionStatus();
+
+
+        // Initialize unit data attributes
+        function initializeUnitAttributes() {
+            // Initialize all area inputs to m2
+            ['ht_surface_area', 'pc_surface_area', 'ct_surface_area'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) input.dataset.unit = 'm2';
+            });
+            
+            // Initialize all volume inputs to m3
+            ['ht_stainless_steel_volume', 'pc_stainless_steel_volume', 'ct_stainless_steel_volume', 'br_stainless_steel_volume'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) input.dataset.unit = 'm3';
+            });
+        }
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
@@ -1488,6 +1617,9 @@
                     console.log('SW registration failed: ', registrationError);
                 });
         }
+
+        // Initialize when page loads
+        initializeUnitAttributes();
 
         // iOS specific optimizations
         if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {

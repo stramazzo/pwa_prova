@@ -1,0 +1,59 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="512" height="512" fill="#2c3e50" rx="64"/>
+    
+    <!-- Coffee cup -->
+    <path d="M96 160h320c25 0 50 25 50 50v100c0 50-37.5 87.5-87.5 87.5H183.5c-50 0-87.5-37.5-87.5-87.5V210c0-25 25-50 50-50z" fill="#8B4513" stroke="#654321" stroke-width="8"/>
+    <ellipse cx="256" cy="160" rx="160" ry="25" fill="#3E2723"/>
+    <path d="M416 210h40c20 0 40 20 40 40v25c0 20-20 40-40 40h-40" fill="none" stroke="#654321" stroke-width="12"/>
+    
+    <!-- Coffee surface -->
+    <ellipse cx="256" cy="180" rx="140" ry="20" fill="#4A2C2A" opacity="0.8"/>
+    
+    <!-- Calculator display -->
+    <rect x="120" y="240" width="272" height="48" fill="#34495e" rx="8"/>
+    <rect x="136" y="248" width="240" height="32" fill="#2c3e50" rx="4"/>
+    
+    <!-- Calculator buttons (top row) -->
+    <circle cx="160" cy="320" r="20" fill="#ecf0f1"/>
+    <circle cx="220" cy="320" r="20" fill="#ecf0f1"/>
+    <circle cx="280" cy="320" r="20" fill="#ecf0f1"/>
+    <circle cx="340" cy="320" r="20" fill="#3498db"/>
+    
+    <!-- Calculator buttons (second row) -->
+    <circle cx="160" cy="380" r="20" fill="#ecf0f1"/>
+    <circle cx="220" cy="380" r="20" fill="#ecf0f1"/>
+    <circle cx="280" cy="380" r="20" fill="#ecf0f1"/>
+    <circle cx="340" cy="380" r="20" fill="#3498db"/>
+    
+    <!-- Calculator buttons (third row) -->
+    <circle cx="160" cy="440" r="20" fill="#ecf0f1"/>
+    <circle cx="220" cy="440" r="20" fill="#ecf0f1"/>
+    <circle cx="280" cy="440" r="20" fill="#ecf0f1"/>
+    <circle cx="340" cy="440" r="20" fill="#27ae60"/>
+    
+    <!-- Button labels -->
+    <text x="160" y="327" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">7</text>
+    <text x="220" y="327" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">8</text>
+    <text x="280" y="327" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">9</text>
+    <text x="340" y="327" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">÷</text>
+    
+    <text x="160" y="387" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">4</text>
+    <text x="220" y="387" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">5</text>
+    <text x="280" y="387" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">6</text>
+    <text x="340" y="387" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">×</text>
+    
+    <text x="160" y="447" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">1</text>
+    <text x="220" y="447" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">2</text>
+    <text x="280" y="447" text-anchor="middle" fill="#2c3e50" font-family="Arial, sans-serif" font-size="16" font-weight="bold">3</text>
+    <text x="340" y="447" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">=</text>
+    
+    <!-- Steam -->
+    <path d="M180 120 Q200 80 180 40" fill="none" stroke="#bdc3c7" stroke-width="8" opacity="0.7"/>
+    <path d="M230 120 Q250 80 230 40" fill="none" stroke="#bdc3c7" stroke-width="8" opacity="0.7"/>
+    <path d="M280 120 Q300 80 280 40" fill="none" stroke="#bdc3c7" stroke-width="8" opacity="0.7"/>
+    <path d="M330 120 Q350 80 330 40" fill="none" stroke="#bdc3c7" stroke-width="8" opacity="0.7"/>
+    
+    <!-- Handle -->
+    <path d="M416 240c0-15 12-27 27-27h20c15 0 27 12 27 27v40c0 15-12 27-27 27h-20c-15 0-27-12-27-27z" fill="#654321"/>
+</svg>
