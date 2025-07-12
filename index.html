@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Astrologico - Sagittario e Ascendente</title>
+    <meta name="description" content="Calcola il tuo segno zodiacale e ascendente">
+    <meta name="theme-color" content="#6366f1">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♐</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔮 Calcolatore Astrologico</h1>
+            <p>Scopri il tuo segno zodiacale e ascendente</p>
+        </header>
+
+        <main>
+            <form id="astroForm" class="astro-form">
+                <div class="form-group">
+                    <label for="birthDate">📅 Data di nascita</label>
+                    <input type="date" id="birthDate" name="birthDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthTime">🕐 Ora di nascita</label>
+                    <input type="time" id="birthTime" name="birthTime" required>
+                    <small>Inserisci l'ora più precisa possibile per un calcolo accurato dell'ascendente</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="birthPlace">📍 Luogo di nascita</label>
+                    <input type="text" id="birthPlace" name="birthPlace" placeholder="Es: Roma, Italia" required>
+                    <small>Inserisci città e paese per calcolare l'ascendente</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="latitude">🌍 Latitudine</label>
+                    <input type="number" id="latitude" name="latitude" step="0.0001" placeholder="Es: 41.9028" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="longitude">🌍 Longitudine</label>
+                    <input type="number" id="longitude" name="longitude" step="0.0001" placeholder="Es: 12.4964" readonly>
+                </div>
+
+                <button type="submit" class="calculate-btn">
+                    <span>🔥 Calcola</span>
+                </button>
+            </form>
+
+            <div id="results" class="results hidden">
+                <h2>I tuoi risultati astrologici</h2>
+                <div class="result-cards">
+                    <div class="result-card">
+                        <h3>♐ Segno Zodiacale</h3>
+                        <div id="zodiacSign" class="result-value"></div>
+                        <div id="zodiacDescription" class="result-description"></div>
+                    </div>
+                    <div class="result-card">
+                        <h3>🌅 Ascendente</h3>
+                        <div id="ascendant" class="result-value"></div>
+                        <div id="ascendantDescription" class="result-description"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>💫 Creato con passione per l'astrologia</p>
+        </footer>
+    </div>
+
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Calcolo in corso...</p>
+    </div>
+
+    <script src="astro-calculations.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
