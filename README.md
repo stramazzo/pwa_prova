@@ -1,162 +1,107 @@
-# 🔮 Calcolatore Astrologico PWA
+# 🍽️ FridgeChef - AI Recipe Suggestions PWA
 
-Una Progressive Web App moderna per calcolare il segno zodiacale e l'ascendente di una persona, con particolare attenzione al segno del Sagittario.
+FridgeChef is a Progressive Web App (PWA) that uses AI to analyze photos of your fridge and suggest delicious recipes based on the ingredients you have available. Simply take a photo of your fridge contents, let our AI detect the ingredients, and get personalized recipe suggestions instantly!
 
-## ✨ Caratteristiche
+## ✨ Features
 
-- 📱 **Progressive Web App** - Installabile su mobile e desktop
-- 🌐 **Funziona offline** - Service Worker per cache intelligente
-- 🎯 **Calcolo del segno zodiacale** - Basato sulla data di nascita
-- 🌅 **Calcolo dell'ascendente** - Usando calcoli astronomici
-- 📍 **Geocoding automatico** - Trova le coordinate dal nome della città
-- 🎨 **Design moderno** - Interfaccia responsive e accattivante
-- ♐ **Focus sul Sagittario** - Evidenziazione speciale per i nati sotto questo segno
+- 📷 **Camera Integration**: Take photos directly with your device's camera
+- 📁 **Photo Upload**: Upload existing photos from your gallery
+- 🤖 **AI-Powered Analysis**: Automatic ingredient detection from fridge photos
+- 🍳 **Smart Recipe Suggestions**: Get recipes based on available ingredients
+- 📱 **Mobile-First Design**: Optimized for smartphones and tablets
+- 🔄 **Offline Support**: Works even without internet connection
+- ⚡ **PWA Features**: Install on your device like a native app
 
-## 🚀 Come usare
+## 🚀 How to Use
 
-### Installazione locale
+1. **Open the App**: Visit FridgeChef in your browser
+2. **Take a Photo**: Use the camera or upload a photo of your fridge
+3. **Review Ingredients**: See what ingredients our AI detected
+4. **Get Recipes**: Tap "Get Recipe Suggestions" to see what you can cook
+5. **Start Cooking**: Choose a recipe and start preparing your meal!
 
-1. Scarica tutti i file nella stessa directory
-2. Avvia un server locale (non aprire direttamente il file HTML):
+## 📱 Installation
 
-```bash
-# Con Python 3
-python -m http.server 8000
+### On Mobile (iOS/Android)
+1. Open FridgeChef in Safari (iOS) or Chrome (Android)
+2. Tap the "Add to Home Screen" option in your browser menu
+3. Confirm the installation
+4. The app icon will appear on your home screen
 
-# Con Node.js (npx)
-npx http-server
+### On Desktop
+1. Open FridgeChef in Chrome, Edge, or Firefox
+2. Look for the install icon in the address bar
+3. Click "Install" to add it to your desktop
 
-# Con Live Server (VS Code extension)
+## 🛠️ Technology Stack
+
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **PWA Features**: Service Worker, Web App Manifest
+- **Camera API**: getUserMedia for camera access
+- **File API**: For photo uploads
+- **Responsive Design**: Mobile-first CSS with Flexbox/Grid
+
+## 🔧 Development
+
+### Prerequisites
+- Modern web browser with camera support
+- Local web server (for development)
+
+### Setup
+1. Clone the repository
+2. Start a local web server in the project directory
+3. Open the app in your browser
+4. Grant camera permissions when prompted
+
+### File Structure
+```
+fridgechef/
+├── index.html          # Main HTML file
+├── app.js              # Application logic
+├── style.css           # Styling
+├── manifest.json       # PWA manifest
+├── sw.js              # Service worker
+└── README.md          # This file
 ```
 
-3. Apri `http://localhost:8000` nel browser
+## 🎯 Real-World Implementation
 
-### Utilizzo dell'app
+While this demo uses simulated AI analysis, a production version would integrate with:
 
-1. **Data di nascita**: Inserisci la tua data di nascita
-2. **Ora di nascita**: Inserisci l'ora più precisa possibile (importante per l'ascendente)
-3. **Luogo di nascita**: Inserisci la città e paese
-   - Le coordinate vengono calcolate automaticamente
-   - Città italiane principali sono pre-configurate
-   - Per altre città usa il geocoding automatico
+- **Google Vision API** - For image recognition
+- **AWS Rekognition** - For ingredient detection
+- **OpenAI Vision** - For advanced image understanding
+- **Recipe APIs** - Like Spoonacular, Edamam, or TheMealDB
+- **Custom ML Models** - Trained specifically for food recognition
 
-4. Clicca **"🔥 Calcola"** per ottenere i risultati
+## 📸 Screenshots
 
-## 📊 Informazioni tecniche
+The app features:
+- Clean, modern interface with green/emerald theme
+- Camera preview with intuitive controls
+- Ingredient tags with easy removal
+- Recipe cards with cooking times and instructions
+- Loading animations and smooth transitions
 
-### Calcoli astrologici
+## 🔮 Future Enhancements
 
-- **Segno zodiacale**: Calcolato in base alla data di nascita e alle date tradizionali dei segni
-- **Ascendente**: Calcolato usando:
-  - Tempo siderale locale
-  - Coordinate geografiche
-  - Data e ora di nascita
-  - Formule astronomiche semplificate
+- **Real AI Integration**: Connect to actual vision APIs
+- **Recipe Database**: Larger recipe collection
+- **Dietary Filters**: Vegetarian, vegan, gluten-free options
+- **Shopping Lists**: Generate lists for missing ingredients
+- **Meal Planning**: Weekly meal suggestions
+- **User Profiles**: Save favorites and dietary preferences
+- **Social Features**: Share recipes with friends
+- **Nutritional Info**: Calorie and nutrition tracking
 
-### Tecnologie utilizzate
+## 🌟 Contributing
 
-- **HTML5** - Struttura semantica
-- **CSS3** - Design moderno con gradients e animazioni
-- **JavaScript ES6+** - Logica dell'applicazione
-- **Service Worker** - Funzionalità offline
-- **Web App Manifest** - Installabilità PWA
-- **Nominatim API** - Geocoding delle città
+This is a demo PWA showcasing modern web technologies. Contributions for improvements and real AI integration are welcome!
 
-### Funzionalità PWA
+## 📄 License
 
-- ✅ Installabile come app nativa
-- ✅ Funziona offline
-- ✅ Responsive design
-- ✅ Icons e splash screen
-- ✅ Service Worker per caching
-- ✅ Manifest per metadati
-
-## 🌍 Geocoding
-
-L'app supporta:
-
-### Città pre-configurate (Italia)
-- Roma, Milano, Napoli, Torino, Palermo
-- Genova, Bologna, Firenze, Bari, Catania
-- Venezia, Verona, Messina, Padova, Trieste
-
-### Geocoding automatico
-- Usa OpenStreetMap Nominatim
-- Funziona per città in tutto il mondo
-- Fallback intelligente per connessioni offline
-
-## 🎨 Design
-
-- **Colori**: Gradiente viola-blu con accenti dorati
-- **Typography**: Font di sistema per prestazioni ottimali
-- **Animazioni**: Transizioni fluide e loading states
-- **Responsive**: Ottimizzato per mobile e desktop
-- **Accessibilità**: Contrasti appropriati e navigazione keyboard
-
-## ♐ Funzionalità speciali Sagittario
-
-Quando il segno calcolato è Sagittario:
-- 🎯 Card evidenziata con colori speciali
-- ✨ Messaggio di congratulazioni
-- 🔥 Animazioni e styling enhanced
-
-## 🔧 Personalizzazione
-
-### Aggiungere nuove città
-Modifica l'oggetto `commonPlaces` in `app.js`:
-
-```javascript
-this.commonPlaces = {
-    'TuaCittà': { lat: 40.1234, lng: 9.5678 },
-    // ... altre città
-};
-```
-
-### Modificare i calcoli
-I calcoli astrologici sono in `astro-calculations.js`:
-- `calculateZodiacSign()` - Logica del segno zodiacale
-- `calculateAscendant()` - Logica dell'ascendente
-
-### Personalizzare il design
-Modifica le variabili CSS in `style.css`:
-
-```css
-:root {
-    --primary-color: #6366f1;
-    --secondary-color: #8b5cf6;
-    --accent-color: #f59e0b;
-    /* ... altre variabili */
-}
-```
-
-## 🐛 Risoluzione problemi
-
-### L'app non si installa
-- Verifica che sia servita tramite HTTPS o localhost
-- Controlla che tutti i file del manifest siano accessibili
-
-### Geocoding non funziona
-- Verifica la connessione internet
-- Prova con una città più conosciuta
-- Inserisci manualmente le coordinate se necessario
-
-### Calcoli inaccurati
-- Verifica che l'ora di nascita sia corretta
-- Controlla che le coordinate siano precise
-- Per massima precisione, usa software astrologico professionale
-
-## 📄 Licenza
-
-Questo progetto è rilasciato sotto licenza MIT.
-
-## 🤝 Contributi
-
-I contributi sono benvenuti! Sentiti libero di:
-- Migliorare i calcoli astrologici
-- Aggiungere nuove funzionalità
-- Migliorare il design
-- Correggere bug
+This project is open source and available under the MIT License.
 
 ---
 
-💫 *Creato con passione per l'astrologia e la tecnologia moderna*
+**Note**: This is a demonstration app. The AI ingredient detection is simulated with mock data. For a production app, you would need to integrate with actual computer vision services for real ingredient recognition.
