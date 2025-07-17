@@ -1,334 +1,341 @@
-// Applicazione principale per il calcolatore astrologico
+// FridgeChef PWA - AI-powered recipe suggestions from fridge contents
 
-class AstrologyApp {
+class FridgeChefApp {
     constructor() {
-        this.form = document.getElementById('astroForm');
-        this.results = document.getElementById('results');
+        this.camera = document.getElementById('camera');
+        this.canvas = document.getElementById('canvas');
+        this.capturedImage = document.getElementById('capturedImage');
         this.loading = document.getElementById('loading');
-        this.birthPlaceInput = document.getElementById('birthPlace');
-        this.latitudeInput = document.getElementById('latitude');
-        this.longitudeInput = document.getElementById('longitude');
+        this.loadingText = document.getElementById('loadingText');
+        
+        // Camera controls
+        this.startCameraBtn = document.getElementById('startCamera');
+        this.capturePhotoBtn = document.getElementById('capturePhoto');
+        this.retakePhotoBtn = document.getElementById('retakePhoto');
+        this.uploadPhotoBtn = document.getElementById('uploadPhoto');
+        this.fileInput = document.getElementById('fileInput');
+        
+        // Sections
+        this.analysisSection = document.getElementById('analysisSection');
+        this.recipesSection = document.getElementById('recipesSection');
+        this.ingredientsList = document.getElementById('ingredientsList');
+        this.recipesList = document.getElementById('recipesList');
+        this.getRecipesBtn = document.getElementById('getRecipes');
+        
+        this.stream = null;
+        this.detectedIngredients = [];
         
         this.init();
     }
     
     init() {
-        this.form.addEventListener('submit', this.handleSubmit.bind(this));
-        this.birthPlaceInput.addEventListener('input', this.handlePlaceInput.bind(this));
-        
-        // Registra il service worker per PWA
+        // Register service worker
         this.registerServiceWorker();
         
-        // Precompila alcuni luoghi comuni per demo
-        this.setupPlaceAutocomplete();
+        // Event listeners
+        this.startCameraBtn.addEventListener('click', () => this.startCamera());
+        this.capturePhotoBtn.addEventListener('click', () => this.capturePhoto());
+        this.retakePhotoBtn.addEventListener('click', () => this.retakePhoto());
+        this.uploadPhotoBtn.addEventListener('click', () => this.fileInput.click());
+        this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+        this.getRecipesBtn.addEventListener('click', () => this.getRecipes());
     }
     
     async registerServiceWorker() {
         if ('serviceWorker' in navigator) {
             try {
                 await navigator.serviceWorker.register('./sw.js');
-                console.log('Service Worker registrato con successo');
+                console.log('Service Worker registered successfully');
             } catch (error) {
-                console.log('Errore nella registrazione del Service Worker:', error);
+                console.log('Service Worker registration failed:', error);
             }
         }
     }
     
-    setupPlaceAutocomplete() {
-        // Lista di città comuni italiane con coordinate pre-calcolate
-        this.commonPlaces = {
-            'Roma': { lat: 41.9028, lng: 12.4964 },
-            'Milano': { lat: 45.4642, lng: 9.1900 },
-            'Napoli': { lat: 40.8518, lng: 14.2681 },
-            'Torino': { lat: 45.0703, lng: 7.6869 },
-            'Palermo': { lat: 38.1157, lng: 13.3615 },
-            'Genova': { lat: 44.4056, lng: 8.9463 },
-            'Bologna': { lat: 44.4949, lng: 11.3426 },
-            'Firenze': { lat: 43.7696, lng: 11.2558 },
-            'Bari': { lat: 41.1171, lng: 16.8719 },
-            'Catania': { lat: 37.5079, lng: 15.0830 },
-            'Venezia': { lat: 45.4408, lng: 12.3155 },
-            'Verona': { lat: 45.4384, lng: 10.9916 },
-            'Messina': { lat: 38.1938, lng: 15.5540 },
-            'Padova': { lat: 45.4064, lng: 11.8768 },
-            'Trieste': { lat: 45.6495, lng: 13.7768 }
-        };
+    async startCamera() {
+        try {
+            this.showLoading('Starting camera...');
+            
+            this.stream = await navigator.mediaDevices.getUserMedia({
+                video: { 
+                    facingMode: 'environment', // Use back camera
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            
+            this.camera.srcObject = this.stream;
+            this.camera.classList.remove('hidden');
+            this.startCameraBtn.classList.add('hidden');
+            this.capturePhotoBtn.classList.remove('hidden');
+            
+            this.hideLoading();
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            this.hideLoading();
+            alert('Unable to access camera. Please try uploading a photo instead.');
+        }
     }
     
-    handlePlaceInput(event) {
-        const place = event.target.value.trim();
+    capturePhoto() {
+        const context = this.canvas.getContext('2d');
+        this.canvas.width = this.camera.videoWidth;
+        this.canvas.height = this.camera.videoHeight;
         
-        // Cerca prima nei luoghi comuni
-        const exactMatch = this.commonPlaces[place];
-        if (exactMatch) {
-            this.latitudeInput.value = exactMatch.lat;
-            this.longitudeInput.value = exactMatch.lng;
+        context.drawImage(this.camera, 0, 0);
+        
+        // Convert to blob and display
+        this.canvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            this.capturedImage.src = url;
+            this.showCapturedPhoto();
+            this.analyzeImage(blob);
+        }, 'image/jpeg', 0.8);
+    }
+    
+    showCapturedPhoto() {
+        this.camera.classList.add('hidden');
+        this.capturedImage.parentElement.classList.remove('hidden');
+        this.capturePhotoBtn.classList.add('hidden');
+        this.retakePhotoBtn.classList.remove('hidden');
+        
+        // Stop camera stream
+        if (this.stream) {
+            this.stream.getTracks().forEach(track => track.stop());
+        }
+    }
+    
+    retakePhoto() {
+        this.capturedImage.parentElement.classList.add('hidden');
+        this.retakePhotoBtn.classList.add('hidden');
+        this.startCameraBtn.classList.remove('hidden');
+        this.analysisSection.classList.add('hidden');
+        this.recipesSection.classList.add('hidden');
+        this.detectedIngredients = [];
+    }
+    
+    handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const url = URL.createObjectURL(file);
+            this.capturedImage.src = url;
+            this.capturedImage.parentElement.classList.remove('hidden');
+            this.startCameraBtn.classList.add('hidden');
+            this.uploadPhotoBtn.classList.add('hidden');
+            this.retakePhotoBtn.classList.remove('hidden');
+            this.analyzeImage(file);
+        }
+    }
+    
+    async analyzeImage(imageBlob) {
+        this.showLoading('Analyzing your fridge contents...');
+        
+        try {
+            // Convert image to base64 for analysis
+            const base64 = await this.blobToBase64(imageBlob);
+            
+            // Simulate AI analysis (in a real app, you would call an AI service like Google Vision API, AWS Rekognition, or OpenAI Vision)
+            await this.simulateAIAnalysis(base64);
+            
+        } catch (error) {
+            console.error('Error analyzing image:', error);
+            this.hideLoading();
+            alert('Error analyzing image. Please try again.');
+        }
+    }
+    
+    blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+    
+    async simulateAIAnalysis(base64Image) {
+        // Simulate AI processing time
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Mock detected ingredients (in real app, this would come from AI service)
+        const mockIngredients = [
+            'Eggs', 'Milk', 'Cheese', 'Tomatoes', 'Onions', 
+            'Bell Peppers', 'Lettuce', 'Carrots', 'Chicken', 
+            'Bread', 'Butter', 'Garlic', 'Potatoes'
+        ];
+        
+        // Randomly select 5-8 ingredients
+        const numIngredients = Math.floor(Math.random() * 4) + 5;
+        this.detectedIngredients = this.shuffleArray(mockIngredients)
+            .slice(0, numIngredients);
+        
+        this.displayIngredients();
+        this.hideLoading();
+    }
+    
+    shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+    
+    displayIngredients() {
+        this.ingredientsList.innerHTML = '';
+        
+        if (this.detectedIngredients.length === 0) {
+            this.ingredientsList.innerHTML = '<p>No ingredients detected. Try a clearer photo.</p>';
+        } else {
+            this.detectedIngredients.forEach((ingredient, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'ingredient-tag removable';
+                tag.textContent = ingredient;
+                tag.addEventListener('click', () => this.removeIngredient(index));
+                this.ingredientsList.appendChild(tag);
+            });
+        }
+        
+        this.analysisSection.classList.remove('hidden');
+    }
+    
+    removeIngredient(index) {
+        this.detectedIngredients.splice(index, 1);
+        this.displayIngredients();
+    }
+    
+    async getRecipes() {
+        if (this.detectedIngredients.length === 0) {
+            alert('No ingredients detected. Please take another photo.');
             return;
         }
         
-        // Cerca parzialmente nei luoghi comuni
-        const partialMatch = Object.keys(this.commonPlaces).find(key => 
-            key.toLowerCase().includes(place.toLowerCase()) && place.length > 2
+        this.showLoading('Finding delicious recipes...');
+        
+        try {
+            // Simulate recipe API call
+            const recipes = await this.generateRecipes(this.detectedIngredients);
+            this.displayRecipes(recipes);
+            this.hideLoading();
+            
+            // Scroll to recipes section
+            this.recipesSection.scrollIntoView({ behavior: 'smooth' });
+        } catch (error) {
+            console.error('Error getting recipes:', error);
+            this.hideLoading();
+            alert('Error getting recipes. Please try again.');
+        }
+    }
+    
+    async generateRecipes(ingredients) {
+        // Simulate API processing time
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Mock recipe data (in real app, this would come from a recipe API)
+        const recipeTemplates = [
+            {
+                name: "Quick Vegetable Stir Fry",
+                time: "15 minutes",
+                mainIngredients: ["bell peppers", "onions", "carrots", "garlic"],
+                instructions: "Heat oil in a pan, add garlic and onions, then add vegetables and stir fry for 5-7 minutes."
+            },
+            {
+                name: "Cheese Omelet",
+                time: "10 minutes", 
+                mainIngredients: ["eggs", "cheese", "butter"],
+                instructions: "Beat eggs, melt butter in pan, pour eggs and add cheese. Fold and serve."
+            },
+            {
+                name: "Chicken Salad",
+                time: "20 minutes",
+                mainIngredients: ["chicken", "lettuce", "tomatoes", "onions"],
+                instructions: "Cook chicken, let cool, then mix with chopped vegetables and dressing."
+            },
+            {
+                name: "Roasted Vegetables",
+                time: "30 minutes",
+                mainIngredients: ["potatoes", "carrots", "bell peppers", "onions"],
+                instructions: "Cut vegetables, toss with oil and seasonings, roast at 400°F for 25-30 minutes."
+            },
+            {
+                name: "Garlic Butter Vegetables",
+                time: "12 minutes",
+                mainIngredients: ["garlic", "butter", "bell peppers", "onions"],
+                instructions: "Melt butter, add garlic, then vegetables. Sauté until tender."
+            }
+        ];
+        
+        // Filter recipes based on available ingredients
+        const availableRecipes = recipeTemplates.filter(recipe => 
+            recipe.mainIngredients.some(ingredient => 
+                ingredients.some(userIngredient => 
+                    userIngredient.toLowerCase().includes(ingredient.toLowerCase()) ||
+                    ingredient.toLowerCase().includes(userIngredient.toLowerCase())
+                )
+            )
         );
         
-        if (partialMatch) {
-            const coords = this.commonPlaces[partialMatch];
-            this.latitudeInput.value = coords.lat;
-            this.longitudeInput.value = coords.lng;
-            return;
-        }
-        
-        // Se non trovato nei luoghi comuni e il campo ha abbastanza caratteri, prova geocoding
-        if (place.length > 3) {
-            this.debounceGeocoding(place);
-        }
+        // Return top 3 recipes or all if less than 3
+        return availableRecipes.slice(0, 3);
     }
     
-    debounceGeocoding(place) {
-        clearTimeout(this.geocodingTimeout);
-        this.geocodingTimeout = setTimeout(() => {
-            this.geocodePlace(place);
-        }, 1000);
+    displayRecipes(recipes) {
+        this.recipesList.innerHTML = '';
+        
+        if (recipes.length === 0) {
+            this.recipesList.innerHTML = '<p>No recipes found with your ingredients. Try adding more ingredients!</p>';
+        } else {
+            recipes.forEach(recipe => {
+                const recipeCard = this.createRecipeCard(recipe);
+                this.recipesList.appendChild(recipeCard);
+            });
+        }
+        
+        this.recipesSection.classList.remove('hidden');
     }
     
-    async geocodePlace(place) {
-        try {
-            // Usa un servizio di geocoding gratuito (Nominatim di OpenStreetMap)
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(place)}&limit=1`);
-            const data = await response.json();
-            
-            if (data && data.length > 0) {
-                const location = data[0];
-                this.latitudeInput.value = parseFloat(location.lat).toFixed(4);
-                this.longitudeInput.value = parseFloat(location.lon).toFixed(4);
-            }
-        } catch (error) {
-            console.error('Errore nel geocoding:', error);
-            // Non mostra errore all'utente per non interrompere l'esperienza
-        }
-    }
-    
-    async handleSubmit(event) {
-        event.preventDefault();
+    createRecipeCard(recipe) {
+        const card = document.createElement('div');
+        card.className = 'recipe-card';
         
-        const formData = new FormData(this.form);
-        const birthData = {
-            birthDate: formData.get('birthDate'),
-            birthTime: formData.get('birthTime'),
-            birthPlace: formData.get('birthPlace'),
-            latitude: formData.get('latitude'),
-            longitude: formData.get('longitude')
-        };
+        // Create ingredients list based on what user has
+        const availableIngredients = recipe.mainIngredients.filter(ingredient =>
+            this.detectedIngredients.some(userIngredient =>
+                userIngredient.toLowerCase().includes(ingredient.toLowerCase()) ||
+                ingredient.toLowerCase().includes(userIngredient.toLowerCase())
+            )
+        );
         
-        // Validazione
-        if (!this.validateForm(birthData)) {
-            return;
-        }
-        
-        this.showLoading(true);
-        
-        try {
-            // Piccolo delay per mostrare l'animazione di caricamento
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            const results = calculateAstrology(birthData);
-            this.displayResults(results);
-            
-        } catch (error) {
-            console.error('Errore nel calcolo:', error);
-            this.showError('Si è verificato un errore durante il calcolo. Riprova.');
-        } finally {
-            this.showLoading(false);
-        }
-    }
-    
-    validateForm(data) {
-        if (!data.birthDate) {
-            this.showError('Inserisci la data di nascita');
-            return false;
-        }
-        
-        if (!data.birthTime) {
-            this.showError('Inserisci l\'ora di nascita');
-            return false;
-        }
-        
-        if (!data.birthPlace) {
-            this.showError('Inserisci il luogo di nascita');
-            return false;
-        }
-        
-        if (!data.latitude || !data.longitude) {
-            this.showError('Non riesco a trovare le coordinate del luogo. Prova con una città più conosciuta o inserisci manualmente le coordinate.');
-            return false;
-        }
-        
-        return true;
-    }
-    
-    showLoading(show) {
-        this.loading.classList.toggle('hidden', !show);
-        this.form.style.pointerEvents = show ? 'none' : 'auto';
-    }
-    
-    showError(message) {
-        // Crea un toast di errore
-        const toast = document.createElement('div');
-        toast.className = 'error-toast';
-        toast.textContent = message;
-        toast.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ef4444;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            z-index: 1001;
-            animation: slideInRight 0.3s ease-out;
+        card.innerHTML = `
+            <div class="recipe-title">${recipe.name}</div>
+            <div class="recipe-time">⏱️ ${recipe.time}</div>
+            <div class="recipe-ingredients">
+                <h4>Available Ingredients:</h4>
+                <ul>
+                    ${availableIngredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="recipe-instructions">
+                <h4>Quick Instructions:</h4>
+                <p>${recipe.instructions}</p>
+            </div>
         `;
         
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.animation = 'slideOutRight 0.3s ease-in';
-            setTimeout(() => toast.remove(), 300);
-        }, 4000);
+        return card;
     }
     
-    displayResults(results) {
-        const { zodiacSign, ascendant, isSagittarius } = results;
-        
-        // Mostra i risultati del segno zodiacale
-        document.getElementById('zodiacSign').innerHTML = `
-            <span style="font-size: 2rem;">${zodiacSign.symbol}</span>
-            <strong>${zodiacSign.sign}</strong>
-            <small>${zodiacSign.dates}</small>
-        `;
-        document.getElementById('zodiacDescription').textContent = zodiacSign.description;
-        
-        // Mostra i risultati dell'ascendente
-        let ascendantHTML = `
-            <span style="font-size: 2rem;">${ascendant.symbol}</span>
-            <strong>${ascendant.sign}</strong>
-        `;
-        
-        if (ascendant.degree !== undefined) {
-            ascendantHTML += `<small>${ascendant.degree}°</small>`;
-        }
-        
-        document.getElementById('ascendant').innerHTML = ascendantHTML;
-        document.getElementById('ascendantDescription').textContent = ascendant.description;
-        
-        // Se c'è un warning per l'ascendente, mostralo
-        if (ascendant.warning) {
-            const warningDiv = document.createElement('div');
-            warningDiv.style.cssText = `
-                background: #fef3c7;
-                border: 1px solid #f59e0b;
-                padding: 0.5rem;
-                border-radius: 6px;
-                margin-top: 0.5rem;
-                font-size: 0.8rem;
-                color: #92400e;
-            `;
-            warningDiv.textContent = `⚠️ ${ascendant.warning}`;
-            document.getElementById('ascendantDescription').appendChild(warningDiv);
-        }
-        
-        // Evidenzia se la persona è del Sagittario
-        if (isSagittarius) {
-            const sagittariusCard = document.querySelector('.result-card:first-child');
-            sagittariusCard.style.background = 'linear-gradient(135deg, #fbbf24, #f59e0b)';
-            sagittariusCard.style.transform = 'scale(1.02)';
-            sagittariusCard.style.boxShadow = '0 8px 25px rgba(245, 158, 11, 0.3)';
-            
-            // Aggiungi un messaggio speciale
-            const specialMessage = document.createElement('div');
-            specialMessage.style.cssText = `
-                background: rgba(255, 255, 255, 0.2);
-                padding: 0.75rem;
-                border-radius: 8px;
-                margin-top: 1rem;
-                font-weight: 600;
-                text-align: center;
-            `;
-            specialMessage.innerHTML = '🎯 Sei un vero Sagittario! ♐';
-            sagittariusCard.appendChild(specialMessage);
-        }
-        
-        // Mostra i risultati con animazione
-        this.results.classList.remove('hidden');
-        this.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    showLoading(message = 'Loading...') {
+        this.loadingText.textContent = message;
+        this.loading.classList.remove('hidden');
+    }
+    
+    hideLoading() {
+        this.loading.classList.add('hidden');
     }
 }
 
-// Aggiungi stili CSS per le animazioni toast
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Inizializza l'applicazione quando il DOM è pronto
+// Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new AstrologyApp();
-});
-
-// Gestisce l'installazione della PWA
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    
-    // Crea un pulsante per l'installazione
-    const installButton = document.createElement('button');
-    installButton.textContent = '📱 Installa App';
-    installButton.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: var(--primary-color);
-        color: white;
-        border: none;
-        padding: 0.75rem 1rem;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-    `;
-    
-    installButton.addEventListener('click', async () => {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            installButton.remove();
-        }
-        deferredPrompt = null;
-    });
-    
-    document.body.appendChild(installButton);
+    new FridgeChefApp();
 });
