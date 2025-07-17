@@ -1,6 +1,6 @@
 // Service Worker per il Calcolatore Astrologico PWA
 
-const CACHE_NAME = 'astro-calc-v1.0.0';
+const CACHE_NAME = 'astro-calc-v1.0.1';
 const STATIC_CACHE_URLS = [
     './',
     './index.html',
